@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>readme</title>
+<style type="text/css">
+.version > dt {
+	float: left ;
+	clear: both ;
+	width: 120px ;
+	margin:0px 0px;
+	padding:10px 0px 10px 0px;
+	border-top-width: 1px;
+	border-top-color: rgb(200, 200, 200);
+	border-top-style: dotted;
+}
+.version > dd {
+	width: 450px ;
+	overflow:hidden;
+	padding:10px 0px 10px 0px;
+	border-top-width: 1px;
+	border-top-color: rgb(200, 200, 200);
+	border-top-style: dotted;
+	border_: libcurl_down_ver;
+}
+
+</style>
+</head>
+<body>
+
+<div style="display:inline-block; vertical-align: top; width:300px; background-color:white; padding:5px; position: fixed; height: 100%; overflow: auto;">
+<a href="#nicoNewRec">ニコ生新配信録画ツール（仮）</a><br>
+<ul>
+	<li><a href="#howTo">使い方</a></li>
+	<li><a href="#mergePlay">コメント付きでの再生方法</a></li>
+	<li><a href="#attention">注意</a></li>
+	<li><a href="#future">機能説明</a></li>
+	<ul>
+		<li><a href="#engine">録画エンジン</a></li>
+		<li><a href="#quality">画質</a></li>
+		<li><a href="#convert">変換・FFmpeg処理</a></li>
+		<li><a href="#complement">補完</a></li>
+		<li><a href="#play">視聴機能</a></li>
+		<li><a href="#arg">引数</a></li>
+		<li><a href="#replaceComment">コメントの置換</a></li>
+	</ul>
+	<li><a href="#update">アップデートの方法</a></li>
+	<li><a href="#tips">Tips</a></li>
+	<ul>
+		<li><a href="#t-dropSeg">セグメント抜けが多い、他の作業をしていると途切れやすい</a></li>
+		<li><a href="#t-notOpenSetting">設定画面が開かない</a></li>
+		<li><a href="#t-commentFew">タイムシフトのコメント取得数がページ上の数より少ない</a></li>
+		<li><a href="#t-commentPacket">コメントファイルを外部ツールで読み込めない</a></li>
+		<li><a href="#t-notFoundAudio">音声が再生されない</a></li>
+		<li><a href="#t-fileNameChange">ファイル名が放送IDだけになる</a></li>
+		<li><a href="#t-audioLatency">mp4に変換すると音ずれしてしまう</a></li>
+		<li><a href="#t-duplicatePlay">録画中、ブラウザやアプリで視聴できない</a></li>
+		<li><a href="#t-notStartTS">追っかけ再生の録画後にタイムシフトの取得が始まらないことがある</a></li>
+		<li><a href="#t-login">ログインができない、クッキーを取得できない</a></li>
+		<li><a href="#t-tsTime">タイムシフト・追っかけ再生で設定した時間と実際に取得したファイルに差がある</a></li>
+		<li><a href="#t-securityDetect">ツールがセキュリティソフトにより検出されてしまう</a></li>
+	</ul>
+	<li><a href="#message">ログメッセージの意味</a></li>
+	<li><a href="#environment">動作環境</a></li>
+	<li><a href="#licence">ライセンス・素材</a></li>
+	<li><a href="#history">更新履歴</a></li>
+	<li><a href="#develop">開発</a></li>
+	
+</ul>
+
+
+<a href="#nicoRecList">録画登録ツール（仮</a><br>
+<ul>
+	<li><a href="#l-howTo">使い方</a></li>
+	<li><a href="#l-history">更新履歴</a></li>
+</ul>
+</div>
+
+
+<div style="display:inline-block; vertical-align: top; background-color:white; margin-left:323px; width:600px; padding:5px 5px 5px 0px">
+<h1 id="nicoNewRec" style="padding-left:331px; margin-left:-331px">ニコ生新配信録画ツール（仮）</h1>
+新配信仕様に対応した映像とコメントのニコニコ生放送録画ツールです。
+
+
+<h2 id="howTo" style="padding-left:331px; margin-left:-331px">使い方</h2>
+最初に「ツール」メニューの「オプション」の「アカウント設定」タブからログイン設定が必要です。<br>
+放送URL欄にURLを入力して「録画開始」を押すと録画を開始します。<br>
+lvから始まる放送IDを引数にして起動した場合は起動と同時に録画を開始します。<br>
+<br>
+セグメントファイルの結合<br>
+ファイルやフォルダを選択して「ニコ生新配信録画ツール（仮.exe」にドロップすれば結合が始まります。<br>
+
+<h2 id="mergePlay" style="padding-left:331px; margin-left:-331px">コメント付きでの再生方法</h2>
+デフォルトの設定の場合、動画の保存先に.xmlファイルとしてコメントファイルが保存されます。こちらを読み込むことでコメント付きで再生や保存ができるかと思います。コメント付きで再生するにはakpg様のcommeonやputin様のこめたんぷれいやのようなプレイヤーがあります。また、動画にコメントを描画した状態で保存するにはpsi様のさきゅばすやakpg様のcommeinのようなツールがあります。他にも便利なものがあるかもしれません。
+
+<h2 id="attention" style="padding-left:331px; margin-left:-331px">注意</h2>
+一般会員アカウントで追い出しや満員により接続が切れてしまう放送は、録画でも途切れてしまいます。<br>
+補完設定をしていても補完ができないときがあります。<br>
+<s>2019年4月30日現在、公式放送では補完機能が働かないようです。<br></s>
+<b>2019年7月16日現在、RTMP録画はブラウザで開いたときに旧配信ページが表示されるタイムシフト放送でのみ動作できます。</b><br>
+<b>2020年6月11日現在、公式放送のリアルタイム配信でもRTMPが使用できるようでした。</b>
+
+<h2 id="future" style="padding-left:331px; margin-left:-331px">機能説明</h2>
+機能についての説明です。<br>
+
+
+<h3 id="engine" style="padding-left:331px; margin-left:-331px">録画エンジン</h3>
+<ul>
+	<li>標準のHLS録画エンジンを使う</li>
+	外部ツールを使わずHLSで録画します。補完機能が使えます。録画中に接続が途切れても一つの動画ファイルとコメントファイルとして
+	出力します。画質が選択ができます。
+	<li>外部のHLS録画エンジンを使う</li>
+	FFmpegやStreamLinkなどの外部ツールを使ってHLSを録画できます。標準のHLS録画に比べて軽いです。
+	補完機能を使うことはできず、録画中に再接続が発生した場合は新しいファイルが作られます。
+	「コマンド」には外部ツールを呼び出す際のコマンドを指定します。画質が選択できます。<br>
+		{i} : プレイリストm3u8のURL<br>
+		{o} : 出力ファイルパス、「{o}.flv」などのように「.拡張子」を指定すると、
+		出力ファイル名の拡張子を指定できます。<br>
+		（例）　ffmpeg -i {i} -c copy {o}.mp4<br>
+	<li>RTMP録画エンジンを使う</li>
+	RTMPに接続して録画します。標準のHLS録画に比べて軽いです。画質の選択はできません。<s>2019年4月30日現在、公式放送のリアルタイム録画では上手く機能しないようです。また、ユーザー放送のタイムシフト録画では上手く機能しないことがありますので、その場合はHLSを推奨します。</s>2019年7月16日現在、RTMP録画はブラウザで開いたときに旧配信ページが表示されるタイムシフト放送でのみ動作できます。
+	2020年6月11日現在、公式放送のリアルタイム配信でもRTMPが使用できるようでした。</b>
+</ul>
+<h3 id="quality" style="padding-left:331px; margin-left:-331px">画質</h3>
+標準のHLS録画エンジン、または外部のHLS録画エンジンを選択しているときに使用されます。
+サーバー接続時に取得可能な画質のうち、優先順位の最も高い画質で録画します。
+2020年7月10日現在、「音声のみ」は遅延が1.0または3.0に設定されている場合のみ有効になるようです。
+
+<h3 id="convert" style="padding-left:331px; margin-left:-331px">変換・FFmpeg処理</h3>
+録画終了後に行われる変換や、エクスプローラ上で.tsファイルをニコ生新配信録画ツール（仮.exeにドロップした際の変換の設定をします。変換処理にはFFmpegが使用されます。<br>
+<dl>
+<dt><samp>処理しない</samp></dt>
+<dd>録画終了後には何も処理しません。ドロップされた際は「形式を変更せず処理する」と同じ処理をします。</dd>
+<dt><samp>形式を変更せず処理する</samp></dt>
+<dd>無劣化で同じ形式のまま新しいファイルに出力します。</dd>
+<dt><samp>ts</samp></dt>
+<dd>無劣化でtsファイルに変換します。</dd>
+<dt><samp>avi</samp></dt>
+<dd>無劣化でaviファイルに変換します。</dd>
+<dt><samp>mp4</samp></dt>
+<dd>無劣化でmp4ファイルに変換します。</dd>
+<dt><samp>flv</samp></dt>
+<dd>映像は無劣化、音声はaacで再エンコードします。</dd>
+<dt><samp>mov</samp></dt>
+<dd>無劣化でmovファイルに変換します。</dd>
+<dt><samp>wmv</samp></dt>
+<dd>無劣化でwmvファイルに変換します。</dd>
+<dt><samp>vob</samp></dt>
+<dd>再エンコードしてvobファイルに出力します。</dd>
+<dt><samp>mkv</samp></dt>
+<dd>無劣化でmkvファイルに変換します。</dd>
+<dt><samp>mp3</samp></dt>
+<dd>再エンコードしてmp3ファイルに出力します。</dd>
+<dt><samp>wav</samp></dt>
+<dd>再エンコードしてwavファイルに出力します。</dd>
+<dt><samp>wma</samp></dt>
+<dd>映像は出力せず、音声は無劣化でwmaファイルに変換します。</dd>
+<dt><samp>aac</samp></dt>
+<dd>mp4形式で映像は出力せず、音声は無劣化でaacファイルとして変換します。</dd>
+<dt><samp>ogg</samp></dt>
+<dd>映像は出力せず、音声はOgg Vorbisに再エンコードしてoggファイルに出力します。</dd>
+<dt><samp>mp4(再エンコード)</samp></dt>
+<dd>再エンコードしてmp4ファイルに出力します。</dd>
+<dt>
+<br>
+mp4へ変換後にWindows Media Player系のプレイヤーで再生すると音声トラブルなどが起こる場合、VLCやMPC-BEなどで再生すると改善されるかもしれません。また、mp4(再エンコード)で変換すると改善されることがあるかもしれません。
+
+<h3 id="complement" style="padding-left:331px; margin-left:-331px">補完機能</h3>
+<s>HLSとRTMPを両方使用して録画することで、HLSの接続が途切れてセグメント抜けが発生した際に
+抜けていた箇所をRTMPで取得できていればRTMP側のデータで補填を試みます。
+従ってHLSとRTMPのどちらでも取得できていなかった部分は補完ができません。</s>
+追っかけ再生を使用することで補完を試みます。従ってオプションの補完設定にプレミアム会員のアカウントが登録されている場合のみ追っかけ再生機能が有効になり、補完機能も有効になります。
+標準のHLS録画エンジンを選択しているときのみ使用できます。
+
+<h3 id="play" style="padding-left:331px; margin-left:-331px">視聴機能</h3>
+録画中に「視聴」ボタンを押すことで放送を視聴できる機能です。<br>
+「オプション」の「視聴」タブで外部のプレイヤーを指定することもできます。「オプション」の「録画方法」タブで「標準のHLS録画エンジンを使う」もしくは「外部のHLS録画エンジンを使う」が設定されている場合はHLSのURL、「RTMP録画エンジンを使う」が設定されている場合はRTMPのURLが再生できるプレイヤーを設定します。<br>
+外部のコメントビューアを使用する場合、引数に放送URLを指定して起動できるツールを設定します。
+
+<h3 id="arg" style="padding-left:331px; margin-left:-331px">引数</h3>
+ニコ生新配信録画ツール（仮.exe [lv番号] [設定]<br>
+<br>
+「-設定項目=設定値」の形式で指定します。 <br>
+「ニコ生新配信録画ツール（仮.config」内の設定項目とタイムシフト録画設定と起動オプションを起動時に指定できます。<br>
+
+例： <samp>-IstitlebarInfo=false -qualityRank=7,6,8,0,1,2,3,4,5 -chase</samp><br>
+<br>
+<h4>主な設定項目</h4>
+<dl>
+<dt><samp>browserNum</samp></dt>
+<dd>ログイン方法 1=アカウントログイン 2=ブラウザクッキー</dd>
+<dt><samp>issecondlogin</samp></dt>
+<dd>予備ログイン　true/false</dd>
+<dt><samp>IsHokan</samp></dt>
+<dd>補完設定　true/false</dd>
+<dt><samp>Isminimized</samp></dt>
+<dd>最小化状態で起動　true/false</dd>
+<dt><samp>IscloseExit</samp></dt>
+<dd>放送終了時に閉じる　true/false</dd>
+<dt><samp>IsgetComment</samp></dt>
+<dd>コメント保存 true/false</dd>
+<dt><samp>IshosoInfo</samp></dt>
+<dd>放送情報のテキスト出力 true/false</dd>
+<dt><samp>IstitlebarInfo</samp></dt>
+<dd>タイトルバーに録画状況表示　true/false</dd>
+<dt><samp>IsgetcommentXml</samp></dt>
+<dd>コメント保存のxml/json形式 true=xmlで保存 false=jsonで保存</dd>
+<dt><samp>IsDisplayComment</samp></dt>
+<dd>コメントを画面に表示 true/false</dd>
+<dt><samp>IstitlebarSamune</samp></dt>
+<dd>タイトルバーにサムネを表示 true/false</dd>
+<dt><samp>IsautoFollowComgen</samp></dt>
+<dd>限定放送を自動でフォロー true/false</dd>
+<dt><samp>qualityRank</samp></dt>
+<dd>画質の優先順位 0=3Mbps(super_high)<br>
+	 1=2Mbps(high・高画質) 2=1Mbps(normal・低画質) 3=384kbps(low) <br>
+	 4=192kbps(super_low) 5=音声のみ(audio_high) <br>
+	 6=6Mbps(6Mbps1080p30fps) 7=8Mbps(8Mbps1080p60fps)<br>
+	 8=4Mbps(4Mbps720p60fps) として「,」区切りで指定。<br>
+	 例）<br>
+	 なるべく高画質　-qualityRank=7,6,8,0,1,2,3,4,5<br>
+	 なるべく低画質　-qualityRank=5,4,3,2,1,0,8,6,7<br>
+	 3Mbps以下　-qualityRank=0,1,2,3,4,5,7,6,8<br>
+	 2Mbps以下　-qualityRank=1,2,3,4,5,0,7,6,8<br>
+	 1Mbps以下　-qualityRank=2,3,4,5,0,1,7,6,8</dd>
+<dt><samp>IsMiniStart</samp></dt>
+<dd>縮小画面で起動 true/false</dd>
+<dt><samp>IsLogFile</samp></dt>
+<dd>ログをファイルに出力する true/false</dd>
+<dt><samp>IsSegmentNukeInfo</samp></dt>
+<dd>セグメントが抜けた際にテキストに出力する true/false</dd>
+<dt><samp>segmentSaveType</samp></dt>
+<dd>セグメントの保存形式 0-セグメントを連結しながら保存 1-セグメントをそのまま保存</dd>
+<dt><samp>IsRenketuAfter</samp></dt>
+<dd>セグメントをそのまま保存する場合、録画後に連結 true/false</dd>
+<dt><samp>EngineMode</samp></dt>
+<dd>録画エンジン 0-標準のHLS録画 1-外部プログラムを使ったHLS録画 2-RTMP録画 3-動画データを取得しない</dd>
+<dt><samp>anotherEngineCommand</samp></dt>
+<dd>外部録画プログラムを実行する際のコマンド コマンド文字列</dd>
+<dt><samp>IsChaseRecord</samp></dt>
+<dd>リアルタイム録画時に追っかけ再生が取得できるときは直近の追っかけ再生から取得する true/false</dd>
+<dt><samp>IsArgChaseRecFromFirst</samp></dt>
+<dd>他のツールから起動された時は番組の最初から録画する true/false</dd>
+<dt><samp>IsOnlyTimeShiftChase</samp></dt>
+<dd>タイムシフトに対応した放送のみ追っかけ再生から取得する true/false</dd>
+<dt><samp>IsChaseReserveRec</samp></dt>
+<dd>公式放送の場合は自動で予約して続きを録画する true/false</dd>
+<dt><samp>IsUsePlayer</samp></dt>
+<dd>視聴時にプレイヤーを使用する true/false</dd>
+<dt><samp>IsDefaultPlayer</samp></dt>
+<dd>デフォルトのプレイヤーを使用 true/false</dd>
+<dt><samp>IsUseCommentViewer</samp></dt>
+<dd>視聴時にコメントビューアを使用する true/false</dd>
+<dt><samp>IsDefaultCommentViewer</samp></dt>
+<dd>デフォルトのコメントビューアを使用 true/false</dd>
+<dt><samp>anotherPlayerPath</samp></dt>
+<dd>外部プレイヤーのパス パス文字列</dd>
+<dt><samp>anotherCommentViewerPath</samp></dt>
+<dd>外部コメントビューアのパス　パス文字列</dd>
+<dt><samp>afterConvertMode</samp></dt>
+<dd>変換・FFmpeg処理　0-処理しない 1-形式を変更せず処理する 2-ts 3-avi 4-mp4 5-flv 6-mov 7-wmv 8-vob 9-mkv 10-mp3(音声) 11-wav(音声) 12-wma(音声) 13-aac(音声) 14-ogg(音声)</dd>
+<dt><samp>IsSoundEnd</samp></dt>
+<dd>録画終了時に音を鳴らす true/false</dd>
+<dt><samp>IsSoundDefault</samp></dt>
+<dd>デフォルトの音を使う true/false</dd>
+<dt><samp>soundPath</samp></dt>
+<dd>録画終了時に鳴らす音のパス</dd>
+<dt><samp>soundVolume</samp></dt>
+<dd>音量 0から100の数字</dd>
+<dt><samp>recordDir</samp></dt>
+<dd>録画保存先フォルダ フォルダパス</dd>
+<dt><samp>IsdefaultRecordDir</samp></dt>
+<dd>デフォルトのRecフォルダに保存 true/false</dd>
+<dt><samp>IscreateSubfolder</samp></dt>
+<dd>サブフォルダに保存 true/false</dd>
+<dt><samp>subFolderNameType</samp></dt>
+<dd>サブフォルダ名 1=放送者名 2=ユーザーID 3=ユーザーID＋放送者名<br>
+	4=コミュ名 5=コミュID 6=コミュID＋コミュ名 7=コミュID＋放送者名<br>
+	8=放送者名＋コミュID</dd>
+<dt><samp>fileNameType</samp></dt>
+<dd>ファイル名 1=名前_コミュID(コミュ名)_放送ID(放送タイトル)_xx.ts
+	2=コミュID(コミュ名)_名前_放送ID(放送タイトル)_xx.ts<br>
+	3=放送ID(放送タイトル)_名前_コミュID(コミュ名)_xx.ts<br>
+	4=名前_コミュ名(コミュID)_放送タイトル(放送ID)_xx.ts<br>
+	5=コミュ名(コミュID)_名前_放送タイトル(放送ID)_xx.ts<br>
+	6=放送タイトル(放送ID)_名前_コミュ名(コミュID)_xx.ts<br>
+	7=日付_名前_コミュ名(コミュID)_放送タイトル(放送ID)_xx.ts<br>
+	8=日付_コミュ名(コミュID)_名前_放送タイトル(放送ID)_xx.ts<br>
+	9=日付_放送タイトル(放送ID)_名前_コミュ名(コミュID)_xx.ts<br>
+	10=独自設定</dd>
+<dt><samp>filenameformat</samp></dt>
+<dd>ファイル名の独自設定 独自設定文字列</dd>
+<br>
+<h4>タイムシフト・追っかけ再生</h4>
+いずれかを指定した場合は録画時にタイムシフト録画設定・追っかけ録画設定ウィンドウが開かなくなります<br><br>
+<dt><samp>ts-start</samp></dt>
+<dd>録画開始時間 [時間]h[分]m[秒]s形式で指定　例 「12h52m3s」など<br>
+	continue=続きから録画 continue-concat 連結しながら保存する設定の場合、続きから連結して保存</dd>
+<dt><samp>ts-end</samp></dt>
+<dd>録画終了時間 [時間]h[分]m[秒]s形式で指定　例 12h52m3sなど</dd>
+<dt><samp>ts-starttime-open</samp></dt>
+<dd>録画開始時間を指定する際に開演時間を基準にする　true/false</dd>
+<dt><samp>ts-endtime-open</samp></dt>
+<dd>録画終了時間を指定する際に開演時間を基準にする　true/false</dd>
+<dt><samp>ts-endtime-delete-pos</samp></dt>
+<dd>録画終了時間により完了した際にファイル名の時間位置情報を削除する　true/false</dd>
+
+<!--
+<dt><samp>ts-list</samp></dt>
+<dd>URLリストを出力　true/false</dd>
+<dt><samp>ts-list-m3u8</samp></dt>
+<dd>M3U8形式で出力 true=M3U8形式 false=シンプル形式</dd>
+<dt><samp>ts-list-update</samp></dt>
+<dd>M3U8形式で出力する場合のリストの更新間隔 秒数の数値</dd>
+<dt><samp>ts-list-open</samp></dt>
+<dd>外部プログラムを使用してURLリストを開く true/false</dd>
+<dt><samp>ts-list-command</samp></dt>
+<dd>外部プログラムを使用してURLリストを開く場合のコマンド コマンド文字列</dd>
+-->
+<dt><samp>ts-starttime-comment</samp></dt>
+<dd>録画開始時間付近以降のコメントを保存する true/false</dd>
+<dt><samp>ts-endtime-comment</samp></dt>
+<dd>録画終了時間付近以前のコメントを保存する  true/false</dd>
+<dt><samp>ts-vpos-starttime</samp></dt>
+<dd>コメントのvposを録画開始時間を起点にして計算する true/false</dd>
+<br>
+<h4>起動オプション</h4>
+<dt><samp>-play</samp></dt>
+<dd>起動と同時に視聴を開始します</dd>
+<dt><samp>-chase</samp></dt>
+<dd>起動と同時に追っかけ再生の録画を開始する</dd>
+<br>
+<h4>アカウント設定</h4>
+<dt><samp>-accountSetting</samp></dt>
+<dd>XML形式で設定することで使用するアカウントを指定できます。<br>
+<pre><code>&lt;AccountSetting&gt;
+	&lt;IsCustomized&gt;true/false&lt;/IsCustomized&gt;
+	&lt;BrowserName&gt;ブラウザ名&lt;/BrowserName&gt;
+	&lt;ProfileName&gt;プロファイル名&lt;/ProfileName&gt;
+	&lt;CookiePath&gt;Cookieのパス&lt;/CookiePath&gt;
+	&lt;EngineId&gt;エンジンID&lt;/EngineId&gt;
+	&lt;mail&gt;アカウントログインに使用するメールアドレス&lt;/mail&gt;
+	&lt;pass&gt;アカウントログインに使用するパスワード&lt;/pass&gt;
+	&lt;isBrowser&gt;true/false&lt;/isBrowser&gt;
+&lt;/AccountSetting&gt;</code></pre><br>
+ここでは見やすさのために改行していますが、引数として入力する際は改行せず、設定を「"」(ダブルクォーテーション)で囲みます。<br>
+例）<br>
+ブラウザログインの場合：<br>
+<pre><code>-accountSetting=&quot;&lt;AccountSetting&gt;  &lt;IsCustomized&gt;false&lt;/IsCustomized&gt;  &lt;BrowserName&gt;GoogleChrome&lt;/BrowserName&gt;  &lt;ProfileName&gt;GoogleChrome&lt;/ProfileName&gt;  &lt;CookiePath&gt;C:/./User Data/Default/Cookies&lt;/CookiePath&gt;  &lt;EngineId&gt;SunokoLibrary.Application.Browsers.ChromeImporterFactory&lt;/EngineId&gt;  &lt;mail /&gt;  &lt;pass /&gt;  &lt;isBrowser&gt;true&lt;/isBrowser&gt;&lt;/AccountSetting&gt;&quot;</code></pre>
+アカウントログインの場合：<br>
+<pre><code>-accountSetting=&quot;&lt;AccountSetting&gt;  &lt;IsCustomized&gt;false&lt;/IsCustomized&gt;  &lt;BrowserName /&gt;  &lt;ProfileName /&gt;  &lt;CookiePath /&gt;  &lt;EngineId /&gt;  &lt;mail&gt;mail&lt;/mail&gt;  &lt;pass&gt;pass&lt;/pass&gt;  &lt;isBrowser&gt;false&lt;/isBrowser&gt;&lt;/AccountSetting&gt;&quot;</code></pre>
+<br>
+ブラウザのCookieを使用する場合はisBrowserをtrueに設定し、IsCustomized、BrowserName、ProfileName、CookiePath、EngineIdを設定します。設定する情報は、「オプション」の「アカウント設定」タブでそのブラウザを選んだ際に保存される「ニコ生新配信録画ツール（仮.xml」内を参照。<br>
+<br>アカウントログインを使用する場合はisBrowserをfalseに設定し、mail、passを設定します。
+</dd>
+</dl>
+
+<h3 id="replaceComment" style="padding-left:331px; margin-left:-331px">コメントの置換</h3>
+「オプション」の「コメント置換リスト」を設定することでコメントを保存する際に指定した文字を置換することができます。設定には正規表現が使用できます。「変換前」の列には置換する前の単語を入力し、「変換後」の列には置換した後の単語を入力します。<br>
+例<br>
+変換前　「わこつ」　変換後「枠取りお疲れ様です」<br>
+コメント内の「わこつ」という文字が「枠取りお疲れ様です」に変更されます。<br>
+<br>
+変換前　「vpos="\d+"」	変換後　「vpos="0"」<br>
+コメントに設定されているvposを0に変換して保存する為、全てのコメントが0秒目に受信されたものとして保存されます。<br>
+<br>
+変換前　「premium="24"」　変換後「premium="0"」<br>
+ブラウザ上で薄く表示されるコメントを通常コメントとして保存します。<br>
+<br>
+変換前　「.+/gift.+」　変換後「」<br>
+コメント内の「/gift」が含まれる行を削除します。同様に「.+わこつ.+」「.+/emotion.+」などとすると、それぞれの含まれる行が削除されます。<br><br>
+変換前　「>/info \d+ (.+?)<」　変換後「>/nicoad {"message":"$1"}<」<br>
+変換前　「>/emotion (.+?)<」 変換後「>/nicoad {"message":"$1"}<」<br>
+変換前　「/gift .*?"(.+?)" (\d+)(.*?"){3}(.+?)".*<」　変換後「/nicoad {"message":"$1さんがギフト「$4($2pt)」を贈りました"}<」<br>
+/info、/emotion、/giftのコメントをニコニ広告のような形式で保存します。<br>
+<br>
+置換は保存される文字に対して行われる為、json形式で保存する場合は、json形式に合わせて設定をする必要があります。
+
+
+<h2 id="update" style="padding-left:331px; margin-left:-331px">アップデートの方法</h3>
+新しいバージョンの全てのファイルをこれまで使っていたフォルダに上書きコピーすると設定を引き継いでアップデートできます。
+
+<h2 id="tips" style="padding-left:331px; margin-left:-331px">Tips</h2>
+<h3 id="t-dropSeg" style="padding-left:331px; margin-left:-331px">セグメント抜けが多い、他の作業をしていると途切れやすい</h3>
+
+「ツール」→「設定」→「録画方法」タブの録画エンジンの設定で、「外部のHLS録画エンジンを使う」か「RTMP録画エンジンを使う」を指定すると改善できるかもしれません。また、標準のHLS録画エンジンを使う場合、録画する画質を下げたり補完機能を使わないように設定すると改善するかもしれません。<br>
+
+<h3 id="t-notOpenSetting" style="padding-left:331px; margin-left:-331px">設定画面が開かない</h3>
+動作には.NET Frameworkのバージョン4.5.2以上が推奨となっております。もしインストールされていない場合はインストールしてみると開けるかもしれないです。
+
+<h3 id="t-commentFew" style="padding-left:331px; margin-left:-331px">タイムシフトのコメント取得数がブラウザの視聴ページ上の数より少ない</h3>
+ページ上に表示されているコメント数はアリーナ席以外の部屋のコメントも含まれていますが、タイムシフトの録画時に取得しているコメントはアリーナ席のみとなっており、その内で追い出しコメントは保存をしないため、ページ上の数よりも保存される数は少なくなります。
+
+<h3 id="t-commentPacket" style="padding-left:331px; margin-left:-331px">コメントファイルを外部ツールで読み込めない</h3>
+コメントファイルの末尾に「&lt/packet>」を書き加えると読み込めるようになるかもしれません。
+
+<h3 id="t-notFoundAudio" style="padding-left:331px; margin-left:-331px">音声が再生されない</h3>
+MPEG2Repairというツールを使用すると音声が再生できるようになるかもしれません。コミュニティ掲示板1604-も参照。<br>
+MPEG2Repair<br>
+<a href="http://www.digital-digest.com/software/MPEG2Repair.html">http://www.digital-digest.com/software/MPEG2Repair.html</a>
+
+<h3 id="t-fileNameChange" style="padding-left:331px; margin-left:-331px">ファイル名が放送IDだけになる</h3>
+ファイル名が長くなりすぎた場合、放送IDのみのファイル名で保存されることがあります。
+
+<h3 id="t-audioLatency" style="padding-left:331px; margin-left:-331px">mp4に変換すると音ずれしてしまう</h3>
+「変換・FFmpeg処理」を「mp4」に設定するとWindows Media Player系のプレイヤーでは音ずれして再生されることがあるようです。「mp4(再エンコード)」に設定すると改善されるかもしれません。既に音ずれしているファイルについては、「mp4(再エンコード)」に設定した後、エクスプローラ上で「ニコ生新配信録画ツール（仮.exe」にファイルをドロップすると修正される可能性があります。<br>
+また、LAV Filtersをインストールすると正常に再生できるようになるかもしれません。
+
+<h3 id="t-duplicatePlay" style="padding-left:331px; margin-left:-331px">録画中、ブラウザやアプリで視聴できない</h3>
+2020年07月01日現在、同じ種類の端末から同じアカウントで同じ放送に対して確立できる接続は一つまでのようです。録画中に視聴する場合、以下の方法により可能になるかもしれません。<br>
+1.録画に使用しているアカウントとは別のアカウントから視聴する<br>
+2．ツールの視聴機能を使用する<br>
+3.「オプション」の「録画方法」タブの「HLS接続時の遅延レベル」を、視聴しているブラウザとは違う端末になるように設定する<br>
+<br>
+3.の「HLS接続時の遅延レベル」が0.5もしくは1.5になっているとPC用の接続、1.0もしくは3.0になっているとAndroidアプリ用の接続を使用して放送に接続されます。<br>
+PCのブラウザから視聴する場合、1.0もしくは3.0に設定するとAndroidアプリ用の回線を使用するため、ブラウザからの視聴に影響を与えずに動作できるかと思います。
+<h3 id="t-notStartTS" style="padding-left:331px; margin-left:-331px">追っかけ再生の録画後にタイムシフトの取得が始まらないことがある</h3>
+通常、追っかけ再生の録画中に番組が終了すると、取得しきれていない残りの放送部分を自動的にタイムシフトから取得します。タイムシフトの取得が開始されない原因として、追っかけ再生により放送の終端まで取得を完了できている場合や、タイムシフトに接続できなかった場合が考えられます。<br>
+<br>
+放送の終端まで取得を完了している場合、取得しているファイルをご覧いただくことで終端まで取得できていることをご確認いただけるかと思います。<br>
+タイムシフトへ接続できなかった場合、視聴ページを開いていただくと番組がタイムシフトに対応していなかったり、取得する権限がなかったりすることをご確認いただけるかと思います。その場合、メイン画面のログ表示部分に「タイムシフトを取得できませんでした」「この放送のタイムシフトの視聴には予約が必要です」「タイムシフトのページの取得に失敗しました」等が表示されているかと思います。
+
+<h3 id="t-login" style="padding-left:331px; margin-left:-331px">ログインができない、クッキーを取得できない</h3>
+このツールでは「オプション」の「アカウント設定」タブの設定により、「次のブラウザとクッキーを共有する」と「ブラウザとクッキーを共有せず、次のアカウントでログインする」のいずれかの方法によりログインを試みます。<br>
+「次のブラウザとクッキーを共有する」にチェックが入っていてクッキーを取得できない場合、ブラウザからクッキーを取得できていないことが考えられます。リストから選択したブラウザ名の横に括弧書きでアカウント名が表示されていない場合、そのブラウザからクッキーを取得できていないことが考えられます。ブラウザを再起動していただくとクッキーを取得できることもあるようでした。ツールがブラウザの仕様に対応できていないこともありますが、その場合、他のブラウザをお試しいただくとクッキーを取得できるかもしれません。<br>
+<br>
+「ブラウザとクッキーを共有せず、次のアカウントでログインする」にチェックが入っていてログインに失敗する場合、ツールからメールアドレスとパスワードを用いたログインができたなかったことが考えられます。アカウントに二段階認証が設定されていた際に、ログインに失敗してしまうようでした。二段階認証が設定されている場合、「次のブラウザとクッキーを共有する」設定をお試しいただくと動作できるかもしれません。ログインの可否は「ログインする」ボタンを押していただき、「login ok」が表示されておりましたら問題ありません。<br>
+
+<h3 id="t-tsTime" style="padding-left:331px; margin-left:-331px">タイムシフト・追っかけ再生で設定した時間と実際に取得したファイルに差がある</h3>
+・5秒ごとの区切りについて<br>
+2023年4月20日現在、タイムシフト・追っかけ再生は約5秒ごとのファイルに分割されているようです。そのため、「タイムシフト録画設定」「追っかけ録画設定」画面で「録画終了時間」に0時間0分8秒のように設定している場合にも0時間0分10秒までのファイルとして取得されることがあると考えられます。区切りの時間位置はちょうど5秒毎の位置ではない場合もあるようでした。そのため、放送により同じ設定でも取得される時間位置が変わることもあるかもしれません。<br>
+また、過去には5秒以外の秒数で区切られている放送もあったようですので、現在もそのような放送があるかもしれません。<br>
+<br>
+・「録画開始時間」「録画終了時間」の設定について<br>
+5秒ごとのファイルの開始位置が、ちょうどの時間は含まず、「録画開始時間」よりも後であり、「録画終了時間」よりも前にあるファイルが保存されます。「録画開始時間」に0時間0分5秒、「録画終了時間」に0時間0分13秒のように設定されている場合、0時間0分5秒から0時間0分13秒の間に始まった5秒間のファイルが保存されることになります。5秒ごとにファイルが区切られている場合は0時間0分5秒は含まれないため0時間0分10秒から0時間0分15秒までの5秒間のファイルが保存されることになるかと思います。
+
+<h3 id="t-securityDetect" style="padding-left:331px; margin-left:-331px">ツールがセキュリティソフトにより検出されてしまう</h3>
+<h4>1.ソースを確認、ビルドしていただいた上でセキュリティソフトの除外設定に追加</h4>
+ツールはオープンソースにより開発されているため、このファイル下部のgithubからソースコードを確認・ビルドしていただくことができます。その上でセキュリティソフトの除外設定に入れていただくと検出されなくなるかと思います。<br>
+<br>
+<h4>2．セキュリティソフトのメーカーに誤検出の可能性として報告</h4>
+ソースコードをご確認いただけるか、もしくはツールをマルウェアではないと思っていただける場合、セキュリティソフトのメーカー様に誤検出の可能性があると報告をしていただくことができます。メーカー様で調査の後、マルウェアではないと判断されればマルウェア定義を更新してくださり、検出されなくなるかもしれません。<br>
+<br>
+Microsoft Defender等、Microsoft製品の報告フォーム<br>
+<i><a href="https://www.microsoft.com/en-us/wdsi/filesubmission/">https://www.microsoft.com/en-us/wdsi/filesubmission/</a></i><br>
+<br>
+その他のセキュリティソフトの場合<br>
+<i>各メーカーにより用意されている誤検出報告の方法によります。</i><br>
+<br>
+<h4>3．セキュリティソフトの除外設定に追加</h4>
+一先ずセキュリティソフトにより検出されないようにする場合、セキュリティソフトの除外設定に追加していただく方法があります。ただし、セキュリティ上、問題がないと確認できた場合にお試しいただくのがよろしいかもしれません。
+
+
+<h2 id="message" style="padding-left:331px; margin-left:-331px">ログメッセージの意味</h2>
+<dl>
+<dt><samp>設定ファイルを読み込めませんでした。設定ファイルをバックアップしました。</samp></dt>
+<dd>ニコ生新配信録画ツール（仮.configの読み込みに失敗。ファイルが不正であったり、壊れていたりなど。同じフォルダ内にバックアップを作成します。</dd>
+<dt><samp>RTMPのタイムシフト録画中はツールでの視聴ができません。</samp></dt>
+<dd>RTMPのタイムシフトを視聴しようとすると表示されます。</dd>
+<dt><samp>プレイヤーの起動中に問題が発生しました/コメントビューアを開始できませんでした</samp></dt>
+<dd>「オプション」の「視聴」タブで設定しているプレイヤーやコメントビューアのパスにファイルが存在しなかったり、実行中に問題が起こった場合に表示。</dd>
+<dt><samp>デフォルトのプレイヤーの起動設定中に問題が発生しました</samp></dt>
+<dd>同梱しているffplay.exeの初期設定時に問題があった場合に表示。同梱のffplayは通常のものを少しカスタマイズしています。</dd>
+
+<dt><samp>出力先ファイルを作成できませんでした</samp></dt>
+<dd>ファイルを結合、変換して出力する際、新しいファイルを作成できなかった場合に表示。ファイルの出力先の書き込み権限や空き容量などが原因の可能性もあります。</dd>
+<dt><samp>拡張子が見つかりませんでした</samp></dt>
+<dd>ファイルを変換する際、変換元のファイルに拡張子が見つからないと表示されます。</dd>
+<dt><samp>FFmpeg処理のための一時ファイルが作成できませんでした</samp></dt>
+<dd>ファイルを結合して出力する際、一時ファイルを作成できないと表示。ファイルの出力先の書き込み権限やファイル容量などが原因の可能性もあります。</dd>
+<dt><samp>補完用アカウントにログインできませんでした</samp></dt>
+<dd>補完機能時に補完用アカウントにログインできないと表示。補完機能の使用時には「オプション」の「補完設定」タブで補完を試みる設定にチェックをつけ、「アカウント設定」タブとは違うアカウントを設定している必要があります。</dd>
+<dt><samp>補完用アカウントでページを取得できませんでした</samp></dt>
+<dd>補完用アカウントで視聴ページを取得できなかった際に表示。「オプション」の「補完設定」タブで設定したアカウントから視聴ページを正常に開けない場合はこちらが表示される可能性があります。</dd>
+<dt><samp>補完用アカウントで追っかけ再生を取得できませんでした</samp></dt>
+<dd>補完用のアカウントで該当の放送の追っかけ再生に対応していない場合に表示されます。アカウントが一般会員であったりなど。</dd>
+<dt><samp>補完の設定に失敗しました</samp></dt>
+<dd>視聴ページから補完に必要な情報を取得できなかった場合に表示。</dd>
+<dt><samp>補完に失敗しました</samp></dt>
+<dd>補完中に何らかの問題が起こった場合に表示。主に接続や録画の際に何らかの問題が起こった可能性があります。</dd>
+<dt><samp>タイムシフトの予約に失敗しました</samp></dt>
+<dd>タイムシフトの予約に失敗した場合に表示。使用しているアカウントの予約の権限や件数などが原因の可能性があります。</dd>
+<dt><samp>タイムシフトのページの取得に失敗しました</samp></dt>
+<dd>タイムシフトのページを取得できなかった際に表示。放送終了後や開始直後など、視聴ページにアクセスすると正常にページが取得できずにこのような表示がされる可能性もあります。しばらく時間を置くと正常に取得できるかもしれません。使用しているアカウントで視聴ページにアクセスしてみると何か分かるかもしれません。</dd>
+<dt><samp>require_community_member</samp></dt>
+<dd>接続したフォロワー限定放送が、「オプション」の「アカウント設定」タブで設定されたアカウントからフォローされていなかった場合に表示。「アカウント設定」タブに放送をフォローしているアカウントを設定していただくことで接続が可能になるかもしれません。</dd>
+<dt><samp>自動承認ではありませんでした。</samp></dt>
+<dd>「オプション」「一般」タブの「コミュニティが自動承認の場合、自動でフォローしてコミュ限を録画する」が設定されていて、接続したフォロワー限定放送がフォローされおらず、フォローが自動承認ではなかった場合に表示。ブラウザ等から放送をフォローすると接続が可能になるかもしれません。</dd>
+<dt><samp>パスに問題があります/保存先パスの取得もしくはフォルダの作成に失敗しました</samp></dt>
+<dd>録画先のパスが長すぎる場合や、正常なパスが取得できなかった際に表示される可能性があります。</dd>
+<dt><samp>補完設定がされていませんでした。</samp></dt>
+<dd>「オプション」の「補完設定」タブで補完を試みる設定にチェックが入っていない場合に表示。</dd>
+<dt><samp>補完用データがありませんでした。</samp></dt>
+<dd>補完用のデータが存在しない場合に表示。補完用のアカウントが一般会員であったり、何らかの原因で追っかけ再生の録画に失敗している場合に起こる可能性があります。</dd>
+<dt><samp>補完中にセグメント抜けが発生しました。作成中の補完ファイルに追加します</samp></dt>
+<dd>補完している最中にさらにセグメント抜けが発生すると表示。新しいセグメント抜けの部分も補完中のファイルにデータを追加します。</dd>
+<dt><samp>この放送はフォローできませんでした。</samp></dt>
+<dd>フォローに許可が必要であったり、フォロー件数が上限だったりするとフォローに失敗して表示。該当するアカウントでブラウザからフォローしようとしてみると何か分かるかもしれません。</dd>
+<dt><samp>コミュニティ情報の取得に失敗しました</samp></dt>
+<dd>コミュニティのフォローのためのアクセスに失敗すると表示。特定のコミュニティでのみ表示される場合は、そのコミュニティの設定などが原因の可能性もありますが、そうではない場合、仕様が変わってしまっていたりツールの不具合の可能性があります。</dd>
+<dt><samp>何らかの問題によりフォローに失敗しました</samp></dt>
+<dd>何らかの問題でフォローに失敗した場合に表示。その後に表示されるメッセージが原因の可能性があります。</dd>
+<dt><samp>フォローへのアクセスに失敗しました</samp></dt>
+<dd>フォロー時のアクセスに失敗した場合に表示。</dd>
+<dt><samp>broadcastId not found</samp></dt>
+<dd>録画時に使用する放送のIDの取得に失敗した場合に表示。</dd>
+<dt><samp>unknown type</samp></dt>
+<dd>録画時の接続が未知のタイプだった場合に表示。仕様が変更されている可能性があります。</dd>
+<dt><samp>追いかけ再生ができませんでした</samp></dt>
+<dd>放送が終了していたり、放送やアカウントが追っかけ再生に対応していない場合に表示。</dd>
+<dt><samp>非ログインで開始を試みます</samp></dt>
+<dd>ログイン済みのアカウントが見つからなかったため、非ログインでリアルタイム録画を開始します。「オプション」の「アカウント設定」タブを設定することで表示されなくなるかと思います。現在の状況では、こちらが表示されていると追っかけ再生やタイムシフトの録画ができません。</dd>
+<dt><samp>録画中に予期せぬ問題が発生しました</samp></dt>
+<dd>録画中に予期していなかった何らかの問題が起こった場合に表示されます。</dd>
+<dt><samp>接続エラー。10秒後リトライします。/接続エラー</samp></dt>
+<dd>正常に録画を開始できなかった際に表示されます。放送開始前に録画を開始しようとするときなどにも表示されます。設定しているアカウントでブラウザから視聴ページを開くと原因が分かるかもしれません。「オプション」の「一般」タブの「接続エラー時と満員時に自動で再接続をする」が設定されていればリトライし、そうでなければそのまま録画を終了します。</dd>
+<dt><samp>require_community_member</samp></dt>
+<dd>コミュニティ限定放送のため接続ができなかった際に表示されます。</dd>
+<dt><samp>ファイルの書き込み後の処理に失敗しました。リトライします。</samp></dt>
+<dd>タイムシフトの録画中、ファイル名の00h00m00sなどの部分を書き換える処理に失敗した際に表示。ファイルを使用中であったり、ディスクへの負荷が高まっている際に表示される可能性があります。</dd>
+<dt><samp>録画後に連結しようとしましたがパスが長すぎてファイルが開けませんでした</samp></dt>
+<dd>録画後のセグメントファイルの連結時に、ファイル名が長すぎるために書き込めないと表示されます。エクスプローラ上でセグメントファイルが保存されているフォルダを「ニコ生新配信録画ツール（仮.exe」へドロップすると結合できるかもしれません。</dd>
+<dt><samp>未書き込みのデータを書き込んでいます...</samp></dt>
+<dd>放送の終了時点、または中断時点で書き込めていないデータが存在する場合に表示。未書き込みのデータを書き込み終わった後に録画を終了。ファイルの書き込みの負荷が高まっている場合に、ファイルの取得に対して書き込みが追いつかないと発生しやすいかもしれません。</dd>
+<dt><samp>{ドライブ名}の空き容量が{空き容量}KBです。</samp></dt>
+<dd>ドライブの空き容量が少なくなっていて書き込みに問題が発生している場合に表示。</dd>
+<dt><samp>ログインに失敗しました。</samp></dt>
+<dd>視聴ページへのアクセス時にログインを確認できなかった際に表示。視聴ページが正常に取得できなかった際にも表示される可能性があります。「オプション」の「アカウント設定」タブを確認し、使用されているアカウントを使い、ブラウザから視聴ページを開くと何か分かるかもしれません。</dd>
+<dt><samp>予約できませんでした</samp></dt>
+<dd>何らかの理由により予約に失敗した際に表示。使用しているアカウントを使い、ブラウザから予約すると何か分かるかもしれません。どの放送でも発生する場合、仕様などが変更されている可能性もあります。</dd>
+<dt><samp>この番組のチケットを正常に使用できませんでした。</samp></dt>
+<dd>何らかの理由によりチケットを正常に使用できなかった際に表示。使用しているアカウントを使い、ブラウザからチケットを使用すると何か分かるかもしれません。どの放送でも発生する場合、仕様などが変更されている可能性もあります。</dd>
+<dt><samp>ページの取得に失敗しました。</samp></dt>
+<dd>視聴ページへのアクセス中に何らかの問題が発生した場合に表示。</dd>
+<dt><samp>RTMPデータが見つかりませんでした</samp></dt>
+<dd>放送情報内にRTMPデータが見つからなかった際に表示。2020年12月時点では公式放送のみRTMPに対応していると思われます。</dd>
+<dt><samp>FFmpeg処理中に一時ファイルが見つかりませんでした</samp></dt>
+<dd>FFmpegから出力されたファイルが見つからなかった際に表示されます。正常にFFmpegから出力できていない可能性があります。「オプション」の「録画方法」タブの「変換・FFmpeg処理」で別の形式を指定してもうまく出力できない場合は出力先のパスに問題がある可能性があります。</dd>
+<dt><samp>変換中にエラーが発生しました ffmpeg</samp></dt>
+<dd>FFmpegの出力後に変換前のファイルを削除したり、一時ファイルのファイル名の変更の際に問題が起こると表示。ファイルを使用中であったりすると発生する可能性があります。</dd>
+<dt><samp>再接続中</samp></dt>
+<dd>放送への接続中に切断されている時間が長いと表示。再接続をします。PC内やサーバー側の何らかの原因によりしばらく接続ができないことがあるようです。</dd>
+<dt><samp>追い出されました。</samp></dt>
+<dd>接続中に追い出されると表示。通常であれば再接続を試みます。メイン画面の「転送状況」が更新されているようであれば正常に再接続されているものと思われます。</dd>
+<dt><samp>サーバーからデータの受信ができませんでした。リトライします。/接続エラーでした</samp></dt>
+<dd>接続中に何らかの原因により接続が途切れると発生することがあるようです。通常であれば再接続を試みます。</dd>
+<dt><samp>配信データが取得できませんでした</samp></dt>
+<dd>配信データが見つからなかった場合に表示。2020年12月現在、RTMPデータが存在しない放送にRTMPで接続しようとするときなどに発生する可能性があります。</dd>
+<dt><samp>サウンドの再生中に問題が発生しました。</samp></dt>
+<dd>サウンドの再生中に問題が発生すると表示。このメッセージの次に少し詳しい情報を表示。</dd>
+<dt><samp>WebSocketのプロキシの設定に失敗しました。/HTTPのプロキシの設定に失敗しました。</samp></dt>
+<dd>プロキシの設定時に問題が発生すると表示。</dd>
+
+
+<h2 id="environment" style="padding-left:331px; margin-left:-331px">動作環境</h2>
+.NET4.5.2以上推奨
+
+<h2 id="licence" style="padding-left:331px; margin-left:-331px">ライセンス・素材</h2>
+SnkLib.App.CookieGetter<br>
+<a href="https://github.com/namoshika/SnkLib.App.CookieGetter/">https://github.com/namoshika/SnkLib.App.CookieGetter/</a><br>
+Copyright (c) 2014 namoshika様.<br>
+Released under the GNU Lesser GPL<br>
+<a href="https://github.com/namoshika/SnkLib.App.CookieGetter/blob/master/LICENSE.txt">https://github.com/namoshika/SnkLib.App.CookieGetter/blob/master/LICENSE.txt</a><br>
+<br>
+CookieGetterSharp<br>
+<a href="https://github.com/namoshika/CookieGetterSharp">https://github.com/namoshika/CookieGetterSharp</a><br>
+Copyright (c) 2014 halxxxx様、うつろ様、にょんにょん様、炬燵犬様, namoshika様<br>
+Released under the GNU Lesser GPL<br>
+<br>
+WebSocket4Net<br>
+<a href="https://github.com/kerryjiang/WebSocket4Net">https://github.com/kerryjiang/WebSocket4Net</a><br>
+Copyright (c) 2012 Kerry Jiang様<br>
+licensed under the Apache License 2.0<br>
+<a href="https://github.com/kerryjiang/WebSocket4Net/blob/master/LICENSE.TXT">https://github.com/kerryjiang/WebSocket4Net/blob/master/LICENSE.TXT</a><br>
+<br>
+SuperSocket<br>
+<a href="https://github.com/kerryjiang/SuperSocket/">https://github.com/kerryjiang/SuperSocket/</a><br>
+Copyright (c) 2012 Kerry Jiang様<br>
+licensed under the Apache License 2.0<br>
+<a href="https://github.com/kerryjiang/SuperSocket/blob/master/LICENSE">https://github.com/kerryjiang/SuperSocket/blob/master/LICENSE</a><br>
+<br>
+FFmpeg・ffplay<br>
+<a href="http://www.ffmpeg.org/">http://www.ffmpeg.org/</a><br>
+Copyright (c) 2000-2018 the FFmpeg developers<br>
+GNU Lesser General Public License version 2.1 or later (LGPL v2.1+)<br>
+<a href="https://github.com/FFmpeg/FFmpeg/blob/master/LICENSE.md">https://github.com/FFmpeg/FFmpeg/blob/master/LICENSE.md</a><br>
+<br>
+Json.NET<br>
+<a href="https://github.com/JamesNK/Newtonsoft.Json">https://github.com/JamesNK/Newtonsoft.Json</a><br>
+Copyright (c) 2007 James Newton-King<br>
+licensed under the MIT License<br>
+<a href="https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md">https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md</a><br>
+<br>
+RTMPDump<br>
+<a href="https://rtmpdump.mplayerhq.hu/">https://rtmpdump.mplayerhq.hu/</a><br>
+Copyright (C) 2009 Andrej Stepanchuk<br>
+Copyright (C) 2010-2011 Howard Chu<br>
+The Flvstreamer Team<br>
+License: GPLv2<br>
+<br>
+Bouncy Castle<br>
+<a href="http://www.bouncycastle.org/">http://www.bouncycastle.org/</a><br>
+Copyright (c) 2000 - 2020 The Legion of the Bouncy Castle Inc.<br>
+MIT license<br>
+<a href="http://www.bouncycastle.org/licence.html">http://www.bouncycastle.org/licence.html</a><br>
+<br>
+<a href="https://github.com/guest-nico/WebSocket4Net_deflate">https://github.com/guest-nico/WebSocket4Net_deflate</a><br>
+<a href="https://github.com/guest-nico/settableVolumeUsingNamedPipeFFplay">https://github.com/guest-nico/settableVolumeUsingNamedPipeFFplay</a><br>
+
+<br>
+フリー素材「取り放題.com」様<br>
+<a href="http://toriho-dai.com/">http://toriho-dai.com/</a><br>
+otosozai.com様<br>
+<a href="http://www.otosozai.com">http://www.otosozai.com</a><br>
+
+
+<h2 id="history" style="padding-left:331px; margin-left:-331px">更新履歴</h2>
+<h3>新配信録画ツール</h3>
+<dl class="version">
+<dt>0.71</dt><dd>公式放送の録画にバグがあったのを修正</dd>
+<dt>0.72</dt><dd>ユーザー放送のページの仕様変更に対応(2018/01/24)</dd>
+<dt>0.73</dt><dd>チャンネル放送の新配信に対応(2018/03/10)</dd>
+<dt>0.80</dt><dd>c#で大幅に作り替え。各種バグの修正及び新機能の追加。(2018/5/30)</dd>
+<dt>0.81</dt><dd>終了と起動のバグ、ログの文字化けを修正</dd>
+<dt>0.82</dt><dd>ログイン処理を微修正</dd>
+<dt>0.83</dt><dd>Cookie処理を修正</dd>
+<dt>0.84</dt><dd>録画中の例外処理を修正(2018/06/08)</dd>
+<dt>0.85</dt><dd>例外処理全般を修正(2018/06/11)</dd>
+<dt>0.85.1</dt><dd>コミュフォローの修正、ログ出力オプション追加(2018/06/11)</dd>
+<dt>0.85.2</dt><dd>websocket切断時処理を修正(2018/06/16)</dd>
+<dt>0.85.3</dt><dd>終了時の例外処理を修正(2018/06/16)</dd>
+<dt>0.85.4</dt><dd>全体的に例外処理を修正(2018/06/16)</dd>
+<dt>0.85.6</dt><dd>自動フォローとログ出力を修正(2018/06/16)</dd>
+<dt>0.85.7</dt><dd>来場コメント数表示の例外の修正(2018/06/16)</dd>
+<dt>0.85.8</dt><dd>フォーム表示の例外修正(2018/06/28)</dd>
+<dt>0.85.9</dt><dd>サイズ保存の不具合修正(2018/07/11)</dd>
+<dt>0.85.10</dt><dd>ニコ生のタイムシフト新配信化による不具合の修正(2018/07/17)</dd>
+<dt>0.86.0</dt><dd>セグメントファイルの保存に対応、通常の録画でもファイルが分割されないように変更、結合にffmpegを使わず(2018/07/26)</dd>
+<dt>0.86.1</dt><dd>結合後にffmpegを使うように修正(2018/07/26)</dd>
+<dt>0.86.2</dt><dd>録画終了処理中にファイルが消える不具合を修正(2018/07/26)</dd>
+<dt>0.86.3</dt><dd>再接続の不具合を修正、結合後にFFmpegを使わない設定を追加(2018/07/26)</dd>
+<dt>0.86.4</dt><dd>タイムシフトの録画機能を追加(2018/08/01)</dd>
+<dt>0.86.5</dt><dd>コメント保存の不具合を修正(2018/08/01)</dd>
+<dt>0.86.6</dt><dd>再接続とドロップで結合する際の不具合を修正、CPU使用率の改善(2018/08/12)</dd>
+<dt>0.86.7</dt><dd>録画に使うコマンドを指定できるように変更。タイムシフト録画のバグを修正(2018/08/21)</dd>
+<dt>0.86.8</dt><dd>視聴機能を追加(2018/08/27)</dd>
+<dt>0.86.9</dt><dd>実験放送に対応(2018/09/08)</dd>
+<dt>0.86.10</dt><dd>WebSocketのwss化に対応、セグメントの取りこぼしを少し修正(2018/09/12)</dd>
+<dt>0.86.11</dt><dd>タイムシフトのコメントを遡って取得できるように修正、セグメントの二重取得の不具合を修正(2018/09/14)</dd>
+<dt>0.86.12</dt><dd>タイムシフトのコメントの時間を修正(2018/09/15)</dd>
+<dt>0.86.13</dt><dd>タイムシフトの録画の不具合を修正、録画時以外でも視聴できる機能を追加(2018/09/16)</dd>
+<dt>0.86.14</dt><dd>リアルタイム録画時のセグメントの取りこぼしをなるべく修正、タイムシフトのURLリスト出力機能を追加(2018/09/18)</dd>
+<dt>0.86.15</dt><dd>公式のタイムシフト録画時に接続が切れる不具合を修正、タイムシフトの設定に終了時間を追加(2018/09/22)</dd>
+<dt>0.86.16</dt><dd>ファイル名の日時に放送開始日時を使うように修正、公式放送でチャンネルと放送者の表示が逆になっていた不具合を修正(2018/09/23)</dd>
+<dt>0.86.17</dt><dd>再接続時のセグメント取得の不具合を修正、ツールから予約する機能を追加(2018/09/26)</dd>
+<dt>0.86.18</dt><dd>タイムシフトの録画が終了しない不具合の修正、放送情報を出力する設定の追加、引数で設定を指定して起動する機能の追加(2018/09/30)</dd>
+<dt>0.86.19</dt><dd>フォルダをドラッグアンドドロップで結合できない不具合の修正、実験放送で録画できないことがある不具合の修正(2018/10/03)</dd>
+<dt>0.87.0</dt><dd>番組情報の出力時の[説明]欄にタグを含むかどうか選択可能に変更。リアルタイム視聴機能時にコメントが表示されない不具合を修正、タイムシフト時にも表示できるように変更。デフォルトプレイヤーに更新ボタンを追加。録画登録ツール0.1.0を同梱。セグメントの取得に失敗した際に補完を試みる機能を追加。(2018/10/14)</dd>
+<dt>0.87.1</dt><dd>0.87.0で起こっていた不具合を修正(2018/10/22)</dd>
+<dt>0.87.2</dt><dd>録画せずに視聴しているときにコメントができなくなっていた不具合を修正、録画が終了しないことがある不具合を修正、ログのメッセージを修正、正常に終了しないことが不具合の修正、再接続できないことがある不具合の修正、視聴にプレイヤーやコメビュを使用しない設定の追加(2018/10/27)</dd>
+<dt>0.87.3</dt><dd>実験放送でコミュニティ名が取得できないことがある不具合を修正(2018/10/28)</dd>
+<dt>0.87.4</dt><dd>視聴のみの機能時にフォルダが作成されてしまう不具合を修正(2018/10/30)</dd>
+<dt>0.87.5</dt><dd>引数起動時に続きから録画されないことがある不具合の修正、放送情報のテキスト出力時ににタグ情報を追加(2018/11/08)</dd>
+<dt>0.87.6</dt><dd>タイムシフトの録画後にファイル名から録画位置の文字列を削除するように変更、時間を指定して開始した場合にコメントの時間を
+録画開始した時間を起点にするように変更。ver0.87.5で視聴ができなくなっていた不具合を修正。セグメント抜け時のテキストファイル出力の有無の設定を追加(2018/11/09)</dd>
+<dt>0.87.7</dt><dd>タイムシフトのコメントのvposの起点の設定を追加(2018/11/10)</dd>
+<dt>0.87.8</dt><dd>タイムシフトが録画できない不具合の修正(2018/11/11)</dd>
+<dt>0.87.9</dt><dd>録画停止時に録画後の変換処理を待ってから終了するように修正(2018/11/17)</dd>
+<dt>0.87.10</dt><dd>サムネイルの取得元の仕様変更に対応、変換処理の不具合を修正(2018/11/28)</dd>
+<dt>0.87.11</dt><dd>ファイル名の開始時間の設定の不具合を修正(2018/11/29)</dd>
+<dt>0.87.12</dt><dd>標準のタイムシフト録画で続きから録画できない不具合を修正(2018/11/30)</dd>
+<dt>0.87.13</dt><dd>外部録画エンジンでのタイムシフト録画時に終了できない不具合を修正。RTMP録画機能を追加。補完機能にRTMPを使うように変更。タイムシフトのURLリスト出力機能を廃止。(2018/12/02)</dd>
+<dt>0.87.14</dt><dd>タイムシフト録画が終了しないことがある不具合を修正。番組情報の表示に放送種別の項目を追加(2018/12/08)</dd>
+<dt>0.87.15</dt><dd>タイムシフトの録画終了の判定を修正(2018/12/11)</dd>
+<dt>0.87.16</dt><dd>RTMPでのタイムシフトの録画時の不具合を修正、HLSの録画時に1時間ごとに途切れる不具合の修正、右クリックメニューからURLのコピーなどができる機能を追加、RTMP録画の仕様変更に対応、タイムシフトのHLS録画時に%表示を追加(2018/12/12)</dd>
+<dt>0.87.17</dt><dd>外部録画エンジンのファイル名を修正、タイムシフトのRTMP録画の際のコメント同期を修正、タイムシフト終了判定を修正、独自設定ファイル名の不具合を修正(2018/12/13)</dd>
+<dt>0.87.18</dt><dd>放送情報の出力時にタグを含める場合、HTMLで出力するように変更。変換処理が指定されていた場合、exeファイルへドロップで変換されるように変更。署名つきでビルドするように変更、外部エンジンとRTMPエンジンで再接続時にコメントファイルも切り替わるように変更。(2018/12/14)</dd>
+<dt>0.87.19</dt><dd>標準エンジンでのタイムシフトで終了しないことがある不具合の修正。WebSocketでTLSを使わないように変更。RTMPのタイムシフト録画で10秒ほどで途切れる不具合の修正。(2018/12/16)</dd>
+<dt>0.87.20</dt><dd>実験放送のコメント取得の不具合を修正。オプションのFFmpeg処理・変換処理の項目の統合。(2018/12/17)</dd>
+<dt>0.87.21</dt><dd>タイムシフトでセグメントが抜けることがある不具合の修正。(2018/12/18)</dd>
+<dt>0.87.22</dt><dd>タイムシフトの終了の不具合を修正。動画データを取得しない設定の追加(2018/12/20)</dd>
+<dt>0.87.23</dt><dd>フォロワー限定放送のタイムシフトが録画できない不具合の修正。(2018/12/21)</dd>
+<dt>0.87.24</dt><dd>旧配信で提供されているタイムシフトに対応。「-play」引数の追加。(2018/12/23)</dd>
+<dt>0.87.25</dt><dd>放送時間が正しく取得できない不具合を修正(2018/12/24)</dd>
+<dt>0.87.25.1</dt><dd>URLをメイン画面へドラッグアンドドロップして受け付ける機能の追加(2018/12/25)</dd>
+<dt>0.87.26</dt><dd>xml形式のコメントファイルのクローズ処理を修正(2018/12/26)</dd>
+<dt>0.87.27</dt><dd>FLV形式への変換の不具合を修正(2018/12/27)</dd>
+<dt>0.87.27.5</dt><dd>RTMPのタイムシフト録画に失敗する不具合の修正。タイムシフトのコメント取得ができない不具合を修正(2019/01/12)</dd>
+<dt>0.87.28</dt><dd>タイムシフト録画設定に「最初から」と「最後まで」を追加、終了時に音を鳴らす機能を追加、rtmpdumpのパスの設定の追加(2019/01/25)</dd>
+<dt>0.87.29</dt><dd>終了時に音が鳴らないことがある不具合を修正(2019/02/04)</dd>
+<dt>0.87.30</dt><dd>フォルダの権限を誤って判定する不具合を修正(2019/02/05)</dd>
+<dt>0.87.31</dt><dd>会員限定放送などでRTMPの録画に失敗することがある不具合を修正、RTMPのタイムシフト録画時のファイル名にファイル番号を使うように変更、HLS録画中に止まることがある不具合の暫定対応、タイムシフト設定を保存する機能を追加、旧配信のタイムシフト録画時に途中で止まる不具合を修正、終了時の音量の設定を追加(2019/02/13)</dd>
+<dt>0.87.32</dt><dd>RTMPでもタイムシフト録画時のファイル名が重複しないように修正(2019/02/14)</dd>
+<dt>0.87.33</dt><dd>セグメントが抜けた際に止まることがある不具合の修正(2019/02/24)</dd>
+<dt>0.87.34</dt><dd>実験放送で録画が開始されないことがある不具合の修正、長時間の公式放送で重くなることがある不具合の修正(2019/03/23)</dd>
+<dt>0.87.35</dt><dd>設定ファイルを読み込めなかったときの処理を修正(2019/03/30)</dd>
+<dt>0.87.35.1</dt><dd>画面内のコメントを非表示にする設定の追加、RTMP利用時に重くなることがある不具合の修正(2019/04/03)</dd>
+<dt>0.87.36</dt><dd>https化に対応、画面の縮小表示機能を追加、アイコンを設定、番組情報の出力に放送終了時間を記載するように変更(2019/04/14)</dd>
+<dt>0.87.36.1</dt><dd>録画中の終了操作時に確認する設定の追加(2019/04/17)</dd>
+<dt>0.87.37</dt><dd>RTMPを使用したリアルタイム録画の取得元を変更、、補完機能を停止(2019/05/10)</dd>
+<dt>0.87.37.1</dt><dd>視聴機能が動作できなくなっていた不具合を修正(2019/05/11)</dd>
+<dt>0.87.37.2</dt><dd>外部ツールから呼び出されて外部のHLS録画エンジンを使用して録画する際の不具合を修正、オプション画面の補完設定タブを削除(2019/06/06)</dd>
+<dt>0.87.37.3</dt><dd>abr画質の項目を削除、タイムシフトの録画状況のタイトルバーの%表示位置を先頭に変更(2019/06/11)</dd>
+<dt>0.87.37.4</dt><dd>録画状況の表示を修正(2019/06/12)</dd>
+<dt>0.87.37.5</dt><dd>画質の引数のチェックを修正(2019/06/13)</dd>
+<dt>0.87.37.6</dt><dd>追っかけ録画の機能を追加(2019/06/16)</dd>
+<dt>0.87.37.7</dt><dd>タイムシフト放送のみを追っかけ録画する設定でタイムシフトを誤判定する不具合の修正、追っかけ録画中に終了する不具合の修正、一般アカウントでの録画に失敗する不具合の修正(2019/06/17)</dd>
+<dt>0.87.38</dt><dd>追っかけ再生の録画時に録画が始まらないことがある不具合を修正、一般会員での録画時に録画できないことがある不具合を修正、追っかけ再生を用いた補完機能を追加(2019/06/21)</dd>
+<dt>0.87.38.1</dt><dd>追っかけ再生の録画後にタイムシフトが存在していても録画できないことがある不具合を修正(2019/07/04)</dd>
+<dt>0.87.38.2</dt><dd>旧配信ページのRTMPが録画できないことがある不具合を修正(2019/07/09)</dd>
+<dt>0.87.39</dt><dd>タイムシフトと追っかけ再生の再生速度の変更機能に対応(2019/07/26)</dd>
+<dt>0.87.39.1</dt><dd>追っかけ再生を録画する引数の追加(2019/07/27)</dd>
+<dt>0.87.39.2</dt><dd>タイムシフトの録画終了時間の判定を修正(2019/07/28)</dd>
+<dt>0.87.40</dt><dd>ページの取得に失敗することがある不具合の修正(2019/08/21)</dd>
+<dt>0.87.41</dt><dd>放送者名を正常に取得できないことがある不具合の修正、年齢認証が必要な放送はメッセージを表示するように修正(2019/08/22)</dd>
+<dt>0.87.42</dt><dd>ページを取得できないことがある不具合の修正、旧配信録画時に動画ファイルとコメントファイルの番号がずれる不具合の修正(2019/08/24)</dd>
+<dt>0.87.43</dt><dd>タイムシフト録画時に画面上の番組情報に終了時刻を表示するように変更(2019/08/25)</dd>
+<dt>0.87.43 debug</dt><dd>倍速録画が上手く機能しないことがある不具合の暫定修正、外部録画エンジンの終了時の処理を修正(2019/08/29)</dd>
+<dt>0.87.44</dt><dd>ドラッグアンドドロップでの結合時にFFmpegを使用するように変更(2019/08/30)</dd>
+<dt>0.87.45</dt><dd>倍速録画が上手く機能しないことがある不具合の暫定修正、引数起動時の追っかけ再生の録画時に最初から録画する設定の追加(2019/08/31)</dd>
+<dt>0.87.46</dt><dd>引数起動時の追っかけ再生の録画時に最初から録画する際のコメントの時間を修正(2019/09/01)</dd>
+<dt>0.87.47</dt><dd>倍速録画が上手く機能しないことがある不具合の修正、時間を指定した追っかけ再生の録画時にもメイン画面にコメントを表示するように変更(2019/09/02)</dd>
+<dt>0.87.48</dt><dd>時間を指定した追っかけ再生の録画時に正常に終了できないことがある不具合を修正(2019/09/04)</dd>
+<dt>0.87.49</dt><dd>タイムシフト録画で正常にコメントが取得できない不具合を修正(2019/09/05)</dd>
+<dt>0.87.50</dt><dd>ver0.87.47以降のタイムシフト・追っかけ再生の録画でセグメントが抜けることがあった不具合の修正、ドラッグアンドドロップでの結合時にFFmpegのm3u8形式の結合を使用するように変更(2019/09/11)</dd>
+<dt>0.87.51</dt><dd>録画中にスリープモードに入らない設定の追加(2019/09/16)</dd>
+<dt>0.87.52</dt><dd>ver0.87.51の更新時にURLを開くWebブラウザの設定が動作できなくなっていた不具合の修正(2019/09/17)</dd>
+<dt>0.87.53</dt><dd>視聴プレイヤーの追加引数の設定を追加、ブラウザからクッキーが取得できなかった際の表示を修正(2019/09/18)</dd>
+<dt>0.87.54</dt><dd>視聴プレイヤーの追加引数の設定でファイル名を指定した際の動作を修正(2019/09/19)</dd>
+<dt>0.87.55</dt><dd>.NET Frameworkのバージョンが4.0以前の場合に.NETのバージョンに関するメッセージを表示できなかった不具合の修正、起動時にDLLの存在をチェックするように修正(2019/09/29)</dd>
+<dt>0.87.56</dt><dd>再接続が働かないことがある不具合を修正(2019/10/12)</dd>
+<dt>0.87.57</dt><dd>録画中に閉じるボタンで終了した際にコメント出力の終了処理ができていなかった不具合の修正(2019/11/04)</dd>
+<dt>0.87.58</dt><dd>ドラッグアンドドロップでの変換時にファイルが一つだけの場合はファイル名を変更しないように修正(2019/11/16)</dd>
+<dt>0.87.59</dt><dd>ブラウザで設定していても年齢認証のある放送の情報を取得できない不具合の修正(2019/11/29)</dd>
+<dt>0.87.60</dt><dd>ver0.87.59よりクッキーを正常に取得できないことがある不具合の修正(2019/11/30)</dd>
+<dt>0.87.61</dt><dd>視聴ページのデザイン変更に対応(2019/12/05)</dd>
+<dt>0.87.62</dt><dd>公式放送の予約ができなくなっていた不具合を修正(2019/12/06)</dd>
+<dt>0.87.63</dt><dd>TS形式で録画中の再接続時にコメントファイルが切り替わる不具合を修正(2019/12/09)</dd>
+<dt>0.87.64</dt><dd>タイムシフトのコメントの取得時にツールが終了してしまうことがある不具合を修正、タイムシフトの録画時にコメントのnoの順番で保存するように修正(2019/12/18)</dd>
+<dt>0.87.65</dt><dd>タイムシフト録画で動画の末尾付近が取得されないことがある不具合の修正、ファイル名の独自設定時にフォルダを指定できる機能を追加(2019/12/28)</dd>
+<dt>0.87.66</dt><dd>タイムシフト録画の際に動画データを取得しない設定にしているとコメントを取得できない不具合を修正(2020/01/04)</dd>
+<dt>0.87.67</dt><dd>タイムシフトのコメントの取得中に問題が発生した際に再試行するように修正(2020/01/07)</dd>
+<dt>0.87.68</dt><dd>タイムシフトの録画の際に終了時間の設定がうまく動作できない不具合の修正(2020/01/10)</dd>
+<dt>0.87.69</dt><dd>タイムシフトの録画の際に終了時間の設定がうまく動作できないことがある不具合の修正、ヘルプメニューに更新方法の項目を追加(2020/01/11)</dd>
+<dt>0.87.69 Chromeのクッキー取得修正の差し替え版</dt><dd>Chromeのクッキーが取得できなくなっていたのを修正(2020/02/08)</dd>
+<dt>0.87.70</dt><dd>タイムシフト録画時に終了できないことがある不具合の修正、Chromiumベース版Microsoft Edgeのクッキーに対応(2020/02/16)</dd>
+<dt>0.87.71</dt><dd>コメントの特殊文字を空白に変換する設定の追加(2020/02/18)</dd>
+<dt>0.87.72</dt><dd>フォームと文字の色の設定を追加(2020/02/24)</dd>
+<dt>0.87.73</dt><dd>リアルタイム録画時のコメント時間のずれを調整(2020/02/29)</dd>
+<dt>0.87.74</dt><dd>再接続中はコメントを保存しない設定を追加(2020/03/04)</dd>
+<dt>0.87.75</dt><dd>再接続中はコメントを保存しない設定がうまく機能できていなかった不具合を修正(2020/03/10)</dd>
+<dt>0.87.76</dt><dd>再接続後の録画再開までに時間がかかることがある不具合を修正(2020/03/14)</dd>
+<dt>0.87.77</dt><dd>録画登録ツールver0.1.3.10.22で放送を登録できないことがある不具合を修正(2020/03/20)</dd>
+<dt>0.87.78</dt><dd>コメントを開始時間の情報付きで保存する設定を追加(2020/03/30)</dd>
+<dt>0.87.79</dt><dd>引数で起動と同時に視聴を開始できなかった不具合を修正(2020/03/31)</dd>
+<dt>0.87.80</dt><dd>前回の終了位置にウィンドウを表示する設定を追加(2020/04/01)</dd>
+<dt>0.87.81</dt><dd>ファイル名の独自設定に来場者数とコメント数の項目を追加(2020/04/19)</dd>
+<dt>0.87.82</dt><dd>番組情報のテキストを正常に作成できないことがある不具合を修正(2020/04/22)</dd>
+<dt>0.87.83</dt><dd>番組情報のテキストを正常に作成できないことがある不具合を修正、来場者数とコメント数をファイル名に使う際に録画終了の10秒後の情報を使うように修正、タイムシフト録画設定で開演時間を基準に時間を指定する設定を追加(2020/04/26)</dd>
+<dt>0.87.84</dt><dd>タイムシフトのコメントが抜けることがある不具合の修正、タイムシフトのコメントが同じ順番で保存されるように修正、ファイルの書き込みに失敗した際に詳しいログを表示するように修正(2020/05/14)</dd>
+<dt>0.87.85</dt><dd>接続ができなくなる問題への暫定対応(2020/05/21)</dd>
+<dt>0.87.86</dt><dd>リアルタイム録画でコメントの時間がずれることがある不具合を修正、プレイリストの読み込みの間隔を修正(2020/05/27)</dd>
+<dt>0.87.87</dt><dd>ver0.87.86でコメントの時間について修正できていなかった部分を修正、空き容量が足りないときにメッセージを表示するように修正(2020/05/28)</dd>
+<dt>0.87.88</dt><dd>録画中に止まることがある不具合を修正(2020/06/02)</dd>
+<dt>0.88.00</dt><dd>放送情報を取得するAPIの仕様変更に対応(2020/06/03)</dd>
+<dt>0.88.01</dt><dd>ネットワーク上のフォルダに保存できない不具合を修正、開始に時間がかかってしまう不具合を修正(2020/06/04)</dd>
+<dt>0.88.02</dt><dd>ページの取得に失敗した際の表示を修正、ログインに失敗した際に録画を終了するように修正、プロキシの設定を追加(2020/06/06)</dd>
+<dt>0.88.03</dt><dd>ページの取得に失敗する不具合の修正(2020/06/07)</dd>
+<dt>0.88.04</dt><dd>ブラウザのリストにユーザー名が表示されないことがある不具合を修正、公式放送のリアルタイム配信でRTMPが使えなくなっていた不具合を修正、追っかけ再生の録画時にファイルの取得と保存の処理を分けるように修正(2020/06/11)</dd>
+<dt>0.88.05</dt><dd>Cookieを取得するブラウザにより録画を開始できない不具合を修正(2020/06/12)</dd>
+<dt>0.88.06</dt><dd>視聴ボタンを押した際に録画が開始されることがある不具合を修正、デフォルトの視聴プレイヤーの設定を廃止、旧配信のタイムシフトを録画できないことがある不具合を修正(2020/06/13)</dd>
+<dt>0.88.06.1</dt><dd>デフォルトの視聴プレイヤーの設定を戻すように修正(2020/06/14)</dd>
+<dt>0.88.07</dt><dd>変換の設定にmp4(再エンコード)を追加、同梱のffplayのバージョンを更新、遅延の設定を追加(2020/06/18)</dd>
+<dt>0.88.08</dt><dd>ver0.88.07で同梱のffplayが正常に動作していなかったのを修正(2020/06/22)</dd>
+<dt>0.88.09</dt><dd>mp3とaacへの変換時に時間が正しく表示されなくなる不具合を修正(2020/06/26)</dd>
+<dt>0.88.10</dt><dd>録画開始時間付近以降のコメントを保存する設定を追加、音声のみを保存する設定を追加(2020/07/11)</dd>
+<dt>0.88.11</dt><dd>空き容量が少なくなった際に録画を中断できるように修正(2020/07/19)</dd>
+<dt>0.88.12</dt><dd>ログインせずに動作する機能を追加、コメントのスレッドIDを正しく保存できていなかった不具合を修正(2020/07/24)</dd>
+<dt>0.88.13</dt><dd>視聴機能のデフォルトのコメントビューアでコメントが送信できなくなっていた不具合を修正(2020/07/28)</dd>
+<dt>0.88.14</dt><dd>フォントのサイズの設定を追加(2020/08/01)</dd>
+<dt>0.88.15</dt><dd>フォントサイズを変更した際に表示が崩れることがあった不具合を修正(2020/08/05)</dd>
+<dt>0.88.16</dt><dd>バージョン情報画面に最新のバージョンを表示する機能を追加(2020/08/22)</dd>
+<dt>0.88.17</dt><dd>旧配信のタイムシフトを録画できないことがある不具合を修正、flvからmp4(再エンコード)へ変換した際に失敗してしまうことがある不具合を修正(2020/10/21)</dd>
+<dt>0.88.18</dt><dd>「設定ファイルフォルダーを開く」「readme.htmlを開く」「録画登録ツールを起動する」メニューを追加(2020/11/12)</dd>
+<dt>0.88.19</dt><dd>コメントをJSONで保存する際の形式を修正、コミュニティをフォローできない不具合を修正(2020/11/24)</dd>
+<dt>0.88.20</dt><dd>一部のエモーションが保存できなかった不具合を修正(2020/12/04)</dd>
+<dt>0.88.21</dt><dd>録画終了時間以降のコメントを保存しない設定を追加(2020/12/05)</dd>
+<dt>0.88.22</dt><dd>チャンネル放送の一部で放送者名を正常に取得できない不具合を修正(2020/12/16)</dd>
+<dt>0.88.23</dt><dd>登録ツールから起動された際に録画終了時間付近以前のコメントを保存する設定が動作できていなかった不具合を修正(2020/12/18)</dd>
+<dt>0.88.24</dt><dd>流量調整により薄く表示されたコメントを通常コメントとして保存する設定を追加(2020/12/25)</dd>
+<dt>0.88.25</dt><dd>録画・中断ボタンをマウスクリックのみで操作できるようにする設定を追加(2021/01/03)</dd>
+<dt>0.88.26</dt><dd>録画終了後にOSを終了、ログアウト、休止状態にする機能を追加(2021/01/05)</dd>
+<dt>0.88.27</dt><dd>予約が必要な放送を開始する際の動作の設定を追加(2021/01/06)</dd>
+<dt>0.88.28</dt><dd>引数で録画開始時間と録画終了時間を設定する際にマイナスを指定できなかったのを修正(2021/01/12)</dd>
+<dt>0.88.29</dt><dd>変換前に容量を確認するように修正、チャンネル限定放送を録画できなかった際にメッセージを表示して中断できるように修正(2021/01/25)</dd>
+<dt>0.88.30</dt><dd>録画中に再接続できずに終了してしまうことがある不具合を修正、動画の終端を取得できないことがある不具合を修正、IEのクッキーのユーザー名を取得できない不具合を修正(2021/01/29)</dd>
+<dt>0.88.31</dt><dd>最小化時に通知領域に収納する設定を追加、タイムシフトの録画時に終了されないことがある不具合を修正(2021/02/19)</dd>
+<dt>0.88.32</dt><dd>放送タイトルが長い場合にメイン画面に放送情報を表示できない不具合を修正(2021/02/23)</dd>
+<dt>0.88.33</dt><dd>タイムシフト録画の開始時に時間がかかることがある不具合を修正、オプション画面のタブの切り替え時に負荷がかかる不具合を修正(2021/03/13)</dd>
+<dt>0.88.34</dt><dd>2回目以降にオプション画面を開いた際の負荷を軽減、タイムシフトのコメント取得時に停止したり最初から再開になってしまうことがある不具合を修正(2021/04/03)</dd>
+<dt>0.88.35</dt><dd>6Mbpsの画質に対応、オプション画面の表示に時間がかかることがある不具合を修正(2021/04/14)</dd>
+<dt>0.88.36</dt><dd>縮小表示の修正、追っかけ再生の録画時に「録画終了時間付近以前のコメントを保存する」が正常に機能していないことがある不具合の修正、ts-list等の引数を受け取らないように修正(2021/04/27)</dd>
+<dt>0.88.37</dt><dd>ver0.88.36でタイムシフトの録画が正常に動作できなくなっていた不具合を修正(2021/04/28)</dd>
+<dt>0.88.38</dt><dd>リアルタイム録画が正常に動作できなくなっていた不具合を修正(2021/04/29)</dd>
+<dt>0.88.39</dt><dd>追っかけ録画中に番組が終了した際にタイムシフトから続きを取得できなくなっていた不具合を修正(2021/05/01)</dd>
+<dt>0.88.40</dt><dd>録画終了時間まで完了した際にファイル名の時間位置情報を削除する設定を追加、続きから開始する際に前回までのファイルを指定する機能を追加(2021/05/10)</dd>
+<dt>0.88.41</dt><dd>タイムシフトの完了時にファイル名の時間位置を削除する設定を追加、前回まで保存していたタイムシフトのファイルを指定する設定を追加、正常にタグを保存できなくなっていた不具合を修正(2021/05/13)</dd>
+<dt>0.88.42</dt><dd>戻ボタンを押した際に番組情報を正常に表示できなくなってしまう不具合を修正、放送削除などにより接続できなかった際に終了する設定が正常に動作できていなかった不具合を修正、完了しているタイムシフト放送を続きから開始した際に終了できなくなってしまうことがある不具合を修正、ブラウザのリストでIEを後方に表示するように修正(2021/05/25)</dd>
+<dt>0.88.43</dt><dd>ver0.88.42よりオプション画面を閉じる際にIEのCookieを選択した状態で保存されてしまうことがある不具合を修正(2021/05/29)</dd>
+<dt>0.88.44</dt><dd>コメントの特殊文字を指定した文字に変換する設定を追加、リアルタイム録画時に接続が切断されている間のコメントを取得できていなかったのを修正(2021/07/11)</dd>
+<dt>0.88.45</dt><dd>ver0.88.44で録画設定をして追っかけ再生を録画する際に正常に終了できなくなっていた不具合を修正、追っかけ再生の取得に失敗した際に登録ツール上で正常に終了したように表示されてしまう不具合を修正(2021/07/19)</dd>
+<dt>0.88.46</dt><dd>メイン画面にタイムシフトの有無を表示する機能を追加、縮小表示時に最小化状態で終了すると前回の終了位置にメインウィンドウを表示する設定が正常に動作できない不具合を修正、録画の終了時にコメントを再取得してしまうことがある不具合を修正(2021/08/07)</dd>
+<dt>0.88.47</dt><dd>視聴ページへの接続先をlive.nicovideo.jpに修正、タイムシフト録画設定・追っかけ録画設定画面で画質を設定する機能を追加(2021/08/10)</dd>
+<dt>0.88.48</dt><dd>Cookieの取得元にIEを表示しないように修正、追っかけ再生の取得時に通常より遅れた時点が取得されていることがある不具合を修正、PCの時刻設定によりコメントを正常に取得できないことがある不具合を修正(2021/08/21)</dd>
+<dt>0.88.49</dt><dd>タイトル、コミュニティ名・チャンネル名、放送者名が長い場合にツールチップを表示する機能を追加、コメントファイルの最後に&lt;/packet>が書き込まれるまでに時間がかかることがある不具合を修正、ver0.88.47以降でセグメントが抜けた際に正常に処理できなくなっていた不具合を修正(2021/08/26)</dd>
+<dt>0.88.50</dt><dd>コメントを置換して保存する設定を追加、高DPIの設定時にタイムシフト録画設定画面と追っかけ録画設定画面が正常に表示されない不具合を修正、メッセージボックスをウィンドウの中央に表示するように修正、流量調整により薄くなったコメントを通常コメントとして保存する設定を廃止(2021/09/06)</dd>
+<dt>0.88.51</dt><dd>正常にメッセージボックスが表示されないことがあった不具合を修正、予約を削除した後にツールから再度予約をしようとすると失敗してしまう不具合を修正、8Mと4Mの画質に対応(2021/09/19)</dd>
+<dt>0.88.52</dt><dd>登録ツールから起動された後に登録ツールが終了するとCPU使用率が上がってしまう不具合を修正、アカウントを設定する引数を追加(2021/10/03)</dd>
+<dt>0.88.53</dt><dd>追っかけ再生の取得後にFFmpegによる変換が行われないことがある不具合を修正、自動起動時に最小化で起動する設定時にウィンドウがアクティブになっていた不具合を修正(2021/10/23)</dd>
+<dt>0.88.54</dt><dd>動画形式を変換した際に動画の長さが変わってしまうことがある不具合を修正(2021/11/21)</dd>
+<dt>0.88.55</dt><dd>登録ツールから起動された後に登録ツールが終了するとCPU使用率が上がってしまう不具合を修正、Chromeのクッキーが取得できなくなっていたのを修正(2021/12/12)</dd>
+<dt>0.88.56</dt><dd>オプション画面を開けないことがある不具合を修正(2021/12/14)</dd>
+<dt>0.88.57</dt><dd>録画中にタイトルが変更されていた場合に録画終了後にファイルのタイトルを変更するように修正、Chromeのデフォルト以外のプロファイルからクッキーを取得できていなかった不具合を修正(2022/01/08)</dd>
+<dt>0.88.58</dt><dd>タイムシフトの取得時に進捗状況をタスクバーの色で表示する機能を追加、タイムシフト・追っかけ録画設定画面のなるべく高画質・なるべく低画質を押した際に8Mbpsと4Mbpsを正常に並べ替えられなかった不具合を修正(2022/03/27)</dd>
+<dt>0.88.59</dt><dd>接続に失敗した際に原因を正しく表示できていないことがあった不具合を修正、タイムシフトの取得中に経過時間が正しく表示されていなかった不具合を修正、音声のみの画質に対応、チャンネルプラスのマニフェストファイルを出力する機能を追加(2022/06/17)</dd>
+<dt>0.88.60</dt><dd>サムネイルが表示されなくなっていた不具合を修正、ver0.88.59で追加したライブラリが正常に動作できていなかった不具合を修正(2022/06/23)</dd>
+<dt>0.88.61</dt><dd>自動起動時は最小化(非アクティブ)状態で起動する設定が正常に動作できていないことがあった不具合を修正、ライブラリのバージョンを更新(2022/11/20)</dd>
+<dt>0.88.62</dt>TLS1.1以前が使用できなかった際に動作できないことがある不具合を修正<dd>(2022/12/10)</dd>
+<dt>0.88.63</dt>タイムシフト・追っかけ録画設定の画面を開いた際に前回の設定が表示されるように修正、「自動起動時は最小化(非アクティブ)状態で起動する」「最小化時に通知領域に収納する」を設定している場合に放送を指定した起動ができなくなってしまう不具合を修正、「RTMP録画エンジンを使う」機能を廃止、録画後の変換に使用するFFmpegの引数の設定を追加<dd>(2023/01/25)</dd>
+<dt>0.88.64</dt>追っかけ録画の場合にも前回の続きから開始できるように修正、エクスプローラ上で実行ファイルにTSファイルやフォルダをドロップした際に正しい順序で結合されない不具合を修正<dd>(2023/01/30)</dd>
+<dt>0.88.65</dt>セグメントファイルを実行ファイルにドロップした際に正しい順序で連結されない不具合を修正、動作後にセグメントファイルを自動で連結する際にフォルダ全体のファイルを連結するように修正<dd>(2023/02/03)</dd>
+<dt>0.88.66</dt>コメントの時間情報が正確に保存されていないことがあった不具合を修正<dd>(2023/02/23)</dd>
+<dt>0.88.67</dt>リアルタイム録画の際にファイルサイズが大きくなり保存されてしまうことがある不具合を修正、リアルタイム録画の際に負荷が少し軽くなるように修正、空き容量が少なくなった際に別のフォルダへ保存する設定を追加、「タイムシフト録画設定」「追っかけ録画設定」画面で「前回の設定」を押した際に「録画開始時間」が「最初から」に設定されてしまうことがある不具合を修正<dd>(2023/04/05)</dd>
+<dt>0.88.68</dt>スリープモードに入らない設定が正常に動作できていなかった不具合を修正、ver0.88.67よりリアルタイム録画の際にファイル名に来場者数とコメント数を表示できなくなっていた不具合を修正、タイムシフト・追っかけ再生で開始時間から終了時間までが5秒以下であった場合に開始時間を含む数秒が取得されるように修正<dd>(2023/04/24)</dd>
+<dt>0.88.69</dt><dd>チャンネルプラスのマニフェストファイルを正常に出力できなくなっていた不具合を修正、リアルタイム録画の際にコメントとの時間がずれやすくなってしまっていた不具合を修正、空き容量が少なくなった際に空き容量を確保しても再開できなくなってしまっていた不具合を修正、二段階認証によるログインに対応(2023/05/19)</dd>
+<dt>0.88.70</dt><dd>ツールから予約をする機能と予約された放送を視聴開始する機能が正常に動作できなくなっていた不具合を修正(2023/06/17)</dd>
+<dt>0.88.71</dt><dd>フォルダ内のセグメントファイルを連結する機能が正常に動作できなくなっていた不具合を修正、設定ファイルを保存する際に一時的にバックアップファイルを作成するように修正(2023/06/21)</dd>
+<dt>0.88.72</dt><dd>仕様変更により接続できなくなっていた不具合に対応(2023/07/12)</dd>
+<dt>0.88.73</dt><dd>放送終了後にタイトルの変更を確認できないことがある不具合を修正(2023/07/13)</dd>
+<dt>0.88.74</dt><dd>暫定的に以前の接続方式に戻すように修正(2023/07/15)</dd>
+<dt>0.88.75</dt><dd>接続ができないことがあった不具合を修正(2023/07/28)</dd>
+<dt>0.88.76</dt><dd>Google Chromeからクッキーを取得できない可能性がある場合にオプション画面でメッセージを表示するように修正、ファイルの取得の際に以前の通信の方式が使用可能な場合にはなるべく以前の方式を使用するように修正、ヘルプメニューに直近の動作記録を確認するメニューを追加(2023/08/15)</dd>
+</dl>
+
+<h2 id="develop" style="padding-left:331px; margin-left:-331px">開発</h2>
+<a href="https://com.nicovideo.jp/community/co2414037">https://com.nicovideo.jp/community/co2414037</a><br>
+<a href="https://github.com/guest-nico/nicoNewStreamRecorderKakkoKari">https://github.com/guest-nico/nicoNewStreamRecorderKakkoKari</a>
+
+<h1 id="nicoRecList" style="padding-left:331px; margin-left:-331px">録画登録ツール（仮</h1>
+リスト形式で放送を登録して新配信録画ツール（仮.exeを呼び出します。新配信録画ツール（仮と同じフォルダに配置します。<br>
+
+<h2 id="l-howTo" style="padding-left:331px; margin-left:-331px">使い方</h2>
+放送URL欄に放送URL等を入力して「録画リスト追加」ボタンを押すと録画リストに放送が追加されます。ユーザーページのURL、チャンネルID、コミュニティIDを入力するとタイムシフトが公開されているそれぞれの放送が追加されます。「録画開始」を押すと録画リスト内の放送の録画を開始します。<br>
+
+<h2 id="l-history" style="padding-left:331px; margin-left:-331px">更新履歴</h2>
+<h3>録画登録ツール</h3>
+<dl class="version">
+<dt>0.1.0</dt><dd>(2018/10/14)</dd>
+<dt>0.1.1</dt><dd>プロセスを重複して起動してしまう不具合を修正、プロセスの同時起動数を指定する設定を追加(2018/10/30)</dd>
+<dt>0.1.2</dt><dd>終了時に表示が「録画中」のままになる不具合を修正(2018/11/04)</dd>
+<dt>0.1.3</dt><dd>続きから録画する機能が働いていなかった不具合を修正(2018/11/05)</dd>
+<dt>0.1.3.1</dt><dd>録画停止時に録画後の変換処理を待ってから終了するように修正(2018/11/17)</dd>
+<dt>0.1.3.2</dt><dd>右クリックのメニューの「コミュニティページへ移動」「コミュニティURLをコピー」の不具合を修正(2018/11/25)</dd>
+<dt>0.1.3.3</dt><dd>オプションのFFmpeg処理・変換処理の項目の統合。(2018/12/17)</dd>
+<dt>0.1.3.4</dt><dd>映像・コメントの取得の設定を追加(2018/12/20)</dd>
+<dt>0.1.3.5</dt><dd>「URL一括登録」と「URLリストの保存」の機能を追加(2018/12/21)</dd>
+<dt>0.1.3.6</dt><dd>上から順番に起動されるように修正(2018/12/23)</dd>
+<dt>0.1.3.7</dt><dd>同時起動時にウエイトを入れるように修正(2019/01/25)</dd>
+<dt>0.1.3.8</dt><dd>URLをドラッグアンドドロップで追加する機能を追加(2019/02/13)</dd>
+<dt>0.1.3.9</dt><dd>設定ファイルを読み込めなかったときの処理を修正(2019/03/30)</dd>
+<dt>0.1.3.10</dt><dd>https化に対応、アイコンを設定(2019/04/14)</dd>
+<dt>0.1.3.10.1</dt><dd>縮小画面で起動、録画中の終了操作時に確認する設定項目を追加(2019/04/17)</dd>
+<dt>0.1.3.10.2</dt><dd>放送の追加時に放送情報を表示するように変更(2019/04/25)</dd>
+<dt>0.1.3.10.3</dt><dd>オプション画面の補完設定タブを削除(2019/06/06)</dd>
+<dt>0.1.3.10.4</dt><dd>abr画質の項目を削除(2019/06/11)</dd>
+<dt>0.1.3.10.5</dt><dd>追っかけ録画の設定を追加(2019/06/16)</dd>
+<dt>0.1.3.10.6</dt><dd>追っかけ再生を用いた補完機能の設定を追加(2019/06/21)</dd>
+<dt>0.1.3.10.7</dt><dd>終了時にリストの内容を保存する機能の追加(2019/08/21)</dd>
+<dt>0.1.3.10.8</dt><dd>録画中にスリープモードに入らない設定項目の追加(2019/09/16)</dd>
+<dt>0.1.3.10.9</dt><dd>ver0.1.3.10.8の更新時にURLを開くWebブラウザの設定が動作できなくなっていた不具合の修正(2019/09/17)</dd>
+<dt>0.1.3.10.10</dt><dd>視聴プレイヤーの追加引数の設定項目を追加(2019/09/18)</dd>
+<dt>0.1.3.10.11</dt><dd>視聴ページのデザイン変更に対応(2019/12/05)</dd>
+<dt>0.1.3.10.12</dt><dd>録画リストを保存できない不具合を修正(2019/12/10)</dd>
+<dt>0.1.3.10.13</dt><dd>ヘルプメニューに更新方法の項目を追加(2020/01/11)</dd>
+<dt>0.1.3.10.13 Chromeのクッキー取得修正の差し替え版</dt><dd>Chromeのクッキーが取得できなくなっていたのを修正(2020/02/08)</dd>
+<dt>0.1.3.10.14</dt><dd>URLリストの保存時に改行が追加、URLの表示形式が統一されていない不具合を修正(2020/02/11)</dd>
+<dt>0.1.3.10.15</dt><dd>コメントの特殊文字を空白に変換する設定の追加(2020/02/18)</dd>
+<dt>0.1.3.10.16</dt><dd>フォームと文字の色の設定を追加(2020/02/24)</dd>
+<dt>0.1.3.10.17</dt><dd>再接続中はコメントを保存しない設定を追加(2020/03/04)</dd>
+<dt>0.1.3.10.18</dt><dd>リストの行が追加・削除された時にもリストを保存するように変更(2020/03/06)</dd>
+<dt>0.1.3.10.19</dt><dd>ver0.1.3.10.18でリストの保存のタイミングを変更したことによる録画状況を認識できないなどの不具合を修正(2020/03/10)</dd>
+<dt>0.1.3.10.20</dt><dd>重複した放送が登録される際にメッセージを表示するように修正(2020/03/15)</dd>
+<dt>0.1.3.10.21</dt><dd>重複した放送の登録時にメッセージを表示した上で登録することもできるように修正(2020/03/18)</dd>
+<dt>0.1.3.10.22</dt><dd>重複した放送の確認をする設定を追加(2020/03/19)</dd>
+<dt>0.1.3.10.23</dt><dd>コメントを開始時間の情報付きで保存する設定を追加(2020/03/30)</dd>
+<dt>0.1.3.10.24</dt><dd>前回の終了位置にウィンドウを表示する設定を追加(2020/04/01)</dd>
+<dt>0.1.3.10.25</dt><dd>ファイル名の独自設定に来場者数とコメント数の項目を追加(2020/04/19)</dd>
+<dt>0.1.3.10.26</dt><dd>タイムシフト録画設定に開演時間を基準に時間を指定する設定を追加(2020/04/26)</dd>
+<dt>0.1.3.10.27</dt><dd>プロキシの設定を追加(2020/06/06)</dd>
+<dt>0.1.3.10.28</dt><dd>デフォルトの視聴プレイヤーの設定を廃止(2020/06/13)</dd>
+<dt>0.1.3.10.28.1</dt><dd>デフォルトの視聴プレイヤーの設定を戻すように修正(2020/06/14)</dd>
+<dt>0.1.3.10.29</dt><dd>変換の設定にmp4(再エンコード)を追加、遅延の設定を追加(2020/06/18)</dd>
+<dt>0.1.3.10.30</dt><dd>録画開始時間付近以降のコメントを保存する設定を追加、開演時間を基準にしてコメントを保存する設定を追加(2020/07/11)</dd>
+<dt>0.1.3.10.31</dt><dd>フォントのサイズの設定を追加(2020/08/01)</dd>
+<dt>0.1.3.10.32</dt><dd>フォントサイズを変更した際に表示が崩れることがあった不具合を修正(2020/08/05)</dd>
+<dt>0.1.3.10.33</dt><dd>バージョン情報画面に最新のバージョンを表示する機能を追加(2020/08/22)</dd>
+<dt>0.1.3.10.34</dt><dd>セキュリティソフトで検出との報告を受け再ビルド(2020/10/09)</dd>
+<dt>0.1.3.10.35</dt><dd>タイムシフト設定と映像・コメントの列の幅を狭められるように修正、列の幅を保存するように修正、表示する列の設定を追加、録画の完了、失敗時に背景色を表示するように修正(2020/10/25)</dd>
+<dt>0.1.3.10.36</dt><dd>表示列のメニューが正常に表示されていなかった不具合と正常に設定をできなかった不具合を修正(2020/10/28)</dd>
+<dt>0.1.3.10.37</dt><dd>録画の終了時に背景色が変更されなくなっていた不具合を修正(2020/11/03)</dd>
+<dt>0.1.3.10.38</dt><dd>リスト中の完了している行を削除する機能の追加(2020/11/07)</dd>
+<dt>0.1.3.10.39</dt><dd>「設定ファイルフォルダーを開く」「readme.htmlを開く」「ニコ生新配信録画ツールを起動する」メニューを追加、追っかけ録画の設定を追加(2020/11/12)</dd>
+<dt>0.1.3.10.40</dt><dd>録画終了時間以降のコメントを保存しない設定を追加(2020/12/05)</dd>
+<dt>0.1.3.10.41</dt><dd>前回終了時の列の幅を正常に表示できないことがある不具合を修正(2020/12/07)</dd>
+<dt>0.1.3.10.42</dt><dd>流量調整により薄く表示されたコメントを通常コメントとして保存する設定を追加(2020/12/25)</dd>
+<dt>0.1.3.10.43</dt><dd>録画・中断ボタンをマウスクリックのみで操作できるようにする設定を追加(2021/01/03)</dd>
+<dt>0.1.3.10.44</dt><dd>予約が必要な放送を開始する際の動作の設定を追加(2021/01/06)</dd>
+<dt>0.1.3.10.45</dt><dd>IEのクッキーのユーザー名を取得できない不具合を修正(2021/01/29)</dd>
+<dt>0.1.3.10.46</dt><dd>最小化時に通知領域に収納する設定を追加(2021/02/19)</dd>
+<dt>0.1.3.10.47</dt><dd>2回目以降にオプション画面を開いた際の負荷を軽減(2021/04/03)</dd>
+<dt>0.1.3.10.48</dt><dd>6Mbpsの画質に対応、オプション画面の表示に時間がかかることがある不具合を修正(2021/04/14)</dd>
+<dt>0.1.3.10.49</dt><dd>録画終了時間まで完了した際にファイル名の時間位置情報を削除する設定を追加(2021/05/10)</dd>
+<dt>0.1.3.10.50</dt><dd>流量調整により薄く表示されたコメントを通常コメントとして保存する設定が正常に反映されていなかった不具合を修正(2021/05/13)</dd>
+<dt>0.1.3.10.51</dt><dd>ブラウザのリストでIEを後方に表示するように修正(2021/05/25)</dd>
+<dt>0.1.3.10.52</dt><dd>ver0.1.3.10.51よりオプション画面を閉じる際にIEのCookieを選択した状態で保存されてしまうことがある不具合を修正(2021/05/29)</dd>
+<dt>0.1.3.10.53</dt><dd>コメントの特殊文字を指定した文字に変換する設定を追加(2021/07/11)</dd>
+<dt>0.1.3.10.54</dt><dd>新しい設定で再登録するメニューを追加(2021/07/19)</dd>
+<dt>0.1.3.10.55</dt><dd>視聴ページへの接続先をlive.nicovideo.jpに修正(2021/08/10)</dd>
+<dt>0.1.3.10.56</dt><dd>録画失敗時の背景色を赤い色に変更、Cookieの取得元にIEを表示しないように修正(2021/08/21)</dd>
+<dt>0.1.3.10.57</dt><dd>コメントを置換して保存する設定を追加、放送URL欄にユーザーページのURL・チャンネルID・コミュニティIDが入力された際に取得可能なタイムシフト放送の追加を試みる機能を追加、メッセージボックスをウィンドウの中央に表示するように修正(2021/09/06)</dd>
+<dt>0.1.3.10.58</dt><dd>8Mと4Mの画質に対応(2021/09/19)</dd>
+<dt>0.1.3.10.59</dt><dd>複数の行を指定した削除・DELETEキーによる削除の機能を追加、行毎にアカウントを設定する機能を追加(2021/10/03)</dd>
+<dt>0.1.3.10.60</dt><dd>Chromeのクッキーが取得できなくなっていたのを修正(2021/12/12)</dd>
+<dt>0.1.3.10.61</dt><dd>オプション画面を開けないことがある不具合を修正(2021/12/14)</dd>
+<dt>0.1.3.10.62</dt><dd>全ての行を削除・完了した行を削除の際に確認のメッセージを表示する設定を追加、重複する放送IDを登録する際のメッセージにタイトルと状態を表示するように修正、Chromeのデフォルト以外のプロファイルからクッキーを取得できていなかった不具合を修正(2022/01/08)</dd>
+<dt>0.1.3.10.63</dt><dd>タイムシフトの取得時に進捗状況をタスクバーの色で表示する機能を追加、タイムシフト・追っかけ録画設定画面のなるべく高画質・なるべく低画質のボタンを押した際に8Mbpsと4Mbpsが正常に並べ替えられなかった不具合を修正、登録ツールの録画リストに並べ替え機能と表示順の移動をする機能を追加、登録ツールのメイン画面で放送情報を表示にする機能を追加(2022/03/27)</dd>
+<dt>0.1.3.10.64</dt><dd>折り畳む機能が正常に動作していないことがある不具合を修正、文字の色の設定を変更した際に折り畳むボタンの文字の色が変更されないように修正(2022/05/11)</dd>
+<dt>0.1.3.10.65</dt><dd>音声のみの画質に対応(2022/06/14)</dd>
+<dt>0.1.3.10.66</dt><dd>ライブラリのバージョンを更新(2022/11/20)</dd>
+<dt>0.1.3.10.67</dt><dd>メイン画面のアカウント設定に録画ツールの設定を使用する設定を追加(2022/12/10)</dd>
+<dt>0.1.3.10.68</dt><dd>録画後の変換に使用するFFmpegの引数の設定を追加(2023/01/25)</dd>
+<dt>0.1.3.10.69</dt><dd>空き容量が少なくなった際に別のフォルダへ保存する設定を追加(2023/04/05)</dd>
+<dt>0.1.3.10.70</dt><dd>二段階認証によるログインに対応(2023/05/19)</dd>
+<dt>0.1.3.10.71</dt><dd>起動に時間がかかってしまうことがあった不具合を修正、メイン画面にリストの登録数の表示を追加(2023/06/17)</dd>
+<dt>0.1.3.10.72</dt><dd>設定ファイルを保存する際に一時的にバックアップファイルを作成するように修正(2023/06/21)</dd>
+<dt>0.1.3.10.73</dt><dd>メイン画面のリストでヘッダーをクリックした際に並べ替えができなくなっていた不具合を修正(2023/06/27)</dd>
+<dt>0.1.3.10.74</dt><dd>仕様変更により接続できなくなっていた不具合に対応(2023/07/12)</dd>
+<dt>0.1.3.10.75</dt><dd>暫定的に以前の接続方式に戻すように修正(2023/07/15)</dd>
+<dt>0.1.3.10.76</dt><dd>接続ができないことがあった不具合を修正(2023/07/28)</dd>
+<dt>0.1.3.10.77</dt><dd>Google Chromeからクッキーを取得できない可能性がある場合にオプション画面でメッセージを表示するように修正、通信について一部を修正(2023/08/15)</dd>
+</dl>
+</div>
+</body>
+</html>
