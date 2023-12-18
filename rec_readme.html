@@ -194,7 +194,7 @@ mp4へ変換後にWindows Media Player系のプレイヤーで再生すると音
 「-設定項目=設定値」の形式で指定します。 <br>
 「ニコ生新配信録画ツール（仮.config」内の設定項目とタイムシフト録画設定と起動オプションを起動時に指定できます。<br>
 
-例： <samp>-IstitlebarInfo=false -qualityRank=7,6,8,0,1,2,3,4,5 -chase</samp><br>
+例： <samp>-IstitlebarInfo=false -qualityRank=7,6,8,0,1,2,3,4,5,9 -chase</samp><br>
 <br>
 <h4>主な設定項目</h4>
 <dl>
@@ -227,13 +227,13 @@ mp4へ変換後にWindows Media Player系のプレイヤーで再生すると音
 	 1=2Mbps(high・高画質) 2=1Mbps(normal・低画質) 3=384kbps(low) <br>
 	 4=192kbps(super_low) 5=音声のみ(audio_high) <br>
 	 6=6Mbps(6Mbps1080p30fps) 7=8Mbps(8Mbps1080p60fps)<br>
-	 8=4Mbps(4Mbps720p60fps) として「,」区切りで指定。<br>
+	 8=4Mbps(4Mbps720p60fps) 9=音声のみ(audio_only) として「,」区切りで指定。<br>
 	 例）<br>
-	 なるべく高画質　-qualityRank=7,6,8,0,1,2,3,4,5<br>
-	 なるべく低画質　-qualityRank=5,4,3,2,1,0,8,6,7<br>
-	 3Mbps以下　-qualityRank=0,1,2,3,4,5,7,6,8<br>
-	 2Mbps以下　-qualityRank=1,2,3,4,5,0,7,6,8<br>
-	 1Mbps以下　-qualityRank=2,3,4,5,0,1,7,6,8</dd>
+	 なるべく高画質　-qualityRank=7,6,8,0,1,2,3,4,5,9<br>
+	 なるべく低画質　-qualityRank=9,5,4,3,2,1,0,8,6,7<br>
+	 3Mbps以下　-qualityRank=0,1,2,3,4,5,9,7,6,8<br>
+	 2Mbps以下　-qualityRank=1,2,3,4,5,9,0,7,6,8<br>
+	 1Mbps以下　-qualityRank=2,3,4,5,9,0,1,7,6,8</dd>
 <dt><samp>IsMiniStart</samp></dt>
 <dd>縮小画面で起動 true/false</dd>
 <dt><samp>IsLogFile</samp></dt>
