@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+<head>
+<title>掲示板</title>
+<style>
+#main {
+	margin:20px 5px 20px 5px;
+	padding: 30px;
+	background:#ffffff;
+}
+.no {
+	font-size: 14px;
+	//font-weight: bold;
+	margin-right: 8px;
+}
+.name {
+	font-size: 14px;
+	font-weight: bold;
+	color: #3c763d;
+	margin-right: 8px;
+}
+.info {
+	height: 14px;
+	font-size: 13px;
+	font-weight: 500;
+	//color: #9b9b9b;
+}
+dd {
+	margin: 16px 8px;
+	font-size: 14px;
+	line-height: 16px;
+	font-family: "MS PGothic AA","MS PGothic","ＭＳ Ｐゴシック","Mona","IPAMonaPGothic","IPA モナー Pゴシック",sans-serif;
+	padding-bottom: 8px;
+}
+#page {
+	text-align: center;
+}
+#page > a {
+	margin: 3px;
+	padding: 0px 1px 0px 1px;
+	border: 1px #67889e solid;
+}
+.curPage {
+	background-color: #103877;
+	color: white;
+}
+#content {
+	border-bottom: 1px solid #e6e6e6;
+	margin-bottom: 20px;
+	padding-bottom: 10px;
+	width: 600px;
+}
+#errorMsg {
+	background: #ff000e;
+	color: white;
+}
+</style>
+</head>
+<body style="background:#f4f4f4">
+<div id="main" style="">
+<div id="content">
+	<dl></dl>
+	<div id="page"></div>
+	<p id="errorMsg"></p>
+</div>
+<label>名前: </label><input type="text" id="name" width="100px"/><br/>
+<label>本文(必須):</label><br>
+<textarea rows="5" cols="47" id="body"></textarea><br>
+<input type="button" value="書き込む" onclick="writeRes()" style="margin-top: 5px"/>
+</div>
+</body>
+
+<script>
+//console.log = function(s) {}
+var addElement = function(item) {
+	var dtE = document.createElement("dt");
+	dtE.innerHTML = '<span class="no">' + item.no + " :</span>" +
+		'<span class="name">' + item.name + "</span>" +
+		'<span class="info">' + item.dt + "</span>";
+	var ddE = document.createElement("dd");
+	ddE.innerHTML = item.body;
+	
+	dl = document.getElementsByTagName("dl")[0];
+	dl.appendChild(dtE);
+	dl.appendChild(ddE);
+}
+var setPage = function(currentNo, resCount, isInPage) {
+	var e = document.getElementById("page");
+	e.innerHTML = "";
+	var b = "";
+	start = Math.floor(currentNo / 30) * 30 - 150 + 1;
+	console.log("start page " + start + " curNo " + currentNo);
+	for (var i = start; i < start + 300; i += 30) {
+		if (i < 0 || i > resCount) continue;
+		
+		isCurrent = currentNo >= i && currentNo < i + 30;
+		if (isCurrent && isInPage) b += "<a class=\"curPage\">" + i + "-</a>";
+		else {
+			b += '<a href="javascript:setRes(' + i + ')">' + i + '-</a>';
+		}
+	}
+	e.innerHTML = b;
+}
+var clearMsg = function() {
+	document.getElementById("errorMsg").innerHTML = "";
+}
+var clearForm = function() {
+	document.getElementById("name").value = "";
+	document.getElementById("body").value = "";
+}
+var request = function(method, q, data, handler) {
+	q += "";
+	query = q != "" ? ("?startNo=" + q) : "";
+	var xhr = new XMLHttpRequest();
+	xhr.open(method, "https://d8fd29fs7vyjj.cloudfront.net/" + query);
+	xhr.setRequestHeader("Content-Type", "application/json")
+	xhr.onreadystatechange  = function (e) {
+	    if (xhr.readyState === 4) {
+		    if (xhr.status === 200) {
+				handler(xhr, q);
+		    } else {
+				console.log("error");
+				console.log(xhr);
+				var json = JSON.parse(xhr.response);
+				document.getElementById("errorMsg").innerHTML = json.msg;
+		    }
+	    }
+	};
+	xhr.send(data);
+}
+var setRes = function (q = "") {
+	clearMsg();
+	h = function(xhr, q) {
+		var json = JSON.parse(xhr.response);
+		console.log(json.length);
+		document.getElementsByTagName("dl")[0].innerHTML = "";
+		for (var i = 0; i < json.items.length; i++) {
+			var item = json.items[i];
+			console.log(item);
+			addElement(item);
+		}
+		currentNo = json.items.length == 0 ? 0 : json.items[json.items.length - 1].no;
+		resCount = json["count"];
+		setPage(currentNo, resCount, q != "");
+	}
+	request("GET", q, null, h);
+}
+writeRes = function() {
+	clearMsg();
+	var name = document.getElementById("name").value;
+	var body = document.getElementById("body").value;
+	json = JSON.stringify({"name":name, "body":body});
+	console.log("write json " + json);
+	
+	h = function(xhr, q) {
+		console.log(xhr.response);
+		var json = JSON.parse(xhr.response);
+		console.log(json.length);
+		document.getElementsByTagName("dl")[0].innerHTML = "";
+		for (var i = 0; i < json.items.length; i++) {
+			var item = json.items[i];
+			console.log(item);
+			addElement(item);
+		}
+		currentNo = json.items.length == 0 ? 0 : json.items[json.items.length - 1].no;
+		resCount = json["count"];
+		setPage(currentNo, resCount, q != "");
+		clearForm();
+	}
+	var res = request("POST", "", json, h);
+}
+setRes();
+</script>
+</html>

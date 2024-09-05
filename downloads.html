@@ -7,7 +7,25 @@
 		padding:0px;
 		word-break: break-all;
 	}
-
+	.md-mainContentBox {
+		width: 670px;
+		background: white;
+		margin:10px;
+		padding:4px 12px;
+		float: left;
+	}
+	dt {
+		font-weight: bold;
+	}
+	dd {
+		padding-bottom: 8px;
+		margin-top: 5px;
+		margin-bottom: 8px;
+		border-bottom: 1px solid #e6e6e6;
+	}
+	#bbs a:visited {
+		color: #0066cc;
+	}
 	</style>
 	
 </head>
@@ -16,12 +34,12 @@
 
 </div>
 
-<section class="md-mainContentBox communityProfile"  style="width:670px;background: white; margin:10px; padding:4px 12px;">
+<section class="md-mainContentBox communityProfile"  style="">
 
 		<span class="profile_text_inner" id="profile_text_content">
 			<br>ニコ生のツールを作っています。
-<br>twitter
-<br><a href="https://twitter.com/guest_nico" target="_blank" rel="noopener nofollow">https://twitter.com/guest_nico</a>
+<br>X(twitter)
+<br><a href="https://x.com/guest_nico" target="_blank" rel="noopener nofollow">https://x.com/guest_nico</a>
 <br>
 <br>
 <br>-----------------------------------------------<br>
@@ -71,11 +89,15 @@ livedl<br>
 <br>
 <br>
 
-
-
 </span>
 </section>
 
+<section class="md-mainContentBox" id="bbs" style="width: 300px; height: fit-content; background: white; padding-bottom: 10px; display: none;">
+掲示板
+<div style="border-bottom: #e6e6e6 1px solid; margin-top: 5px; margin-bottom: 15px;"></div>
+<dl style="font-size: 12px"></dl>
+<div style="text-align: center;"><a href="bbs.html">掲示板へ</a></div>
+</section>
 </body>
 <script>
 	var getCommitData = function (s, t) {
@@ -123,6 +145,55 @@ livedl<br>
 	getCommitData("nicoNewStreamRecorderKakkoKari", "Rec");
 	getCommitData("nicoLiveCheckTool", "Check");
 	getCommitData("ncvPlayPlugin", "Play");
-		
+
+//bbs
+var addElement = function(item) {
+	var dtE = document.createElement("dt");
+	dtE.innerHTML = '<span class="no">' + item.no + ".</span>" +
+		'<span class="name">' + item.name + ":</span>" +
+		'<span class="info">' + item.dt + "</span>";
+	var ddE = document.createElement("dd");
+	ddE.innerHTML = item.body;
+	
+	dl = document.getElementsByTagName("dl")[0];
+	dl.appendChild(dtE);
+	dl.appendChild(ddE);
+}
+var request = function(method, q, data, handler) {
+	q += "";
+	query = q != "" ? ("?displayNum=" + q) : "";
+	var xhr = new XMLHttpRequest();
+	xhr.open(method, "https://d8fd29fs7vyjj.cloudfront.net/" + query);
+	xhr.setRequestHeader("Content-Type", "application/json")
+	xhr.onreadystatechange  = function (e) {
+	    if (xhr.readyState === 4) {
+		    if (xhr.status === 200) {
+				handler(xhr, q);
+		    } else {
+				console.log("error");
+				console.log(xhr);
+				var json = JSON.parse(xhr.response);
+				document.getElementById("errorMsg").innerHTML = json.msg;
+		    }
+	    }
+	};
+	xhr.send(data);
+}
+var setRes = function (q = "") {
+	//clearMsg();
+	h = function(xhr, q) {
+		var json = JSON.parse(xhr.response);
+		console.log(json.length);
+		document.getElementsByTagName("dl")[0].innerHTML = "";
+		for (var i = 0; i < json.items.length; i++) {
+			var item = json.items[i];
+			console.log(item);
+			addElement(item);
+		}
+		document.getElementById("bbs").style.display = "block";
+	}
+	request("GET", q, null, h);
+}
+setRes(5);
 </script>
 </html>
