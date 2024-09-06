@@ -72,13 +72,16 @@ dd {
 
 <script>
 //console.log = function(s) {}
+var items = [];
 var addElement = function(item) {
 	var dtE = document.createElement("dt");
-	dtE.innerHTML = '<span class="no">' + item.no + " :</span>" +
+	dtE.innerHTML = '<span class="no" id="' + item.no + '">' + item.no + " :</span>" +
 		'<span class="name">' + item.name + "</span>" +
 		'<span class="info">' + item.dt + "</span>";
 	var ddE = document.createElement("dd");
-	ddE.innerHTML = item.body;
+	ddE.innerHTML = item.body
+			.replace(/(https*:\/\/[0-9a-zA-Z\/?=\.\-_%:#!()@]+)/g, "<a href='$&'>$&</a>")
+			.replace(/>>((\d+)(\-(\d+))*)/g, "<a href='javascript:linkRes($2, $4)'>$&</a>");
 	
 	dl = document.getElementsByTagName("dl")[0];
 	dl.appendChild(dtE);
@@ -128,20 +131,25 @@ var request = function(method, q, data, handler) {
 	};
 	xhr.send(data);
 }
+var setResFromResponse = function(response, q) {
+	var json = JSON.parse(response);
+	console.log(json.length);
+	document.getElementsByTagName("dl")[0].innerHTML = "";
+	for (var i = 0; i < json.items.length; i++) {
+		var item = json.items[i];
+		console.log(item);
+		addElement(item);
+	}
+	items = json.items;
+	currentNo = json.items.length == 0 ? 0 : json.items[json.items.length - 1].no;
+	resCount = json["count"];
+	setPage(currentNo, resCount, q != "");
+}
 var setRes = function (q = "") {
 	clearMsg();
+	
 	h = function(xhr, q) {
-		var json = JSON.parse(xhr.response);
-		console.log(json.length);
-		document.getElementsByTagName("dl")[0].innerHTML = "";
-		for (var i = 0; i < json.items.length; i++) {
-			var item = json.items[i];
-			console.log(item);
-			addElement(item);
-		}
-		currentNo = json.items.length == 0 ? 0 : json.items[json.items.length - 1].no;
-		resCount = json["count"];
-		setPage(currentNo, resCount, q != "");
+		setResFromResponse(xhr.response, q);
 	}
 	request("GET", q, null, h);
 }
@@ -153,21 +161,19 @@ writeRes = function() {
 	console.log("write json " + json);
 	
 	h = function(xhr, q) {
-		console.log(xhr.response);
-		var json = JSON.parse(xhr.response);
-		console.log(json.length);
-		document.getElementsByTagName("dl")[0].innerHTML = "";
-		for (var i = 0; i < json.items.length; i++) {
-			var item = json.items[i];
-			console.log(item);
-			addElement(item);
-		}
-		currentNo = json.items.length == 0 ? 0 : json.items[json.items.length - 1].no;
-		resCount = json["count"];
-		setPage(currentNo, resCount, q != "");
+		setResFromResponse(xhr.response, q);
 		clearForm();
 	}
 	var res = request("POST", "", json, h);
+}
+var linkRes = function(r0, r1) {
+	var isInPage = items.find(x => x.no == r0) &&
+			(!r1 || items.find(x => x.no == r1));
+	if (isInPage) {
+		document.getElementById(r0).scrollIntoView();
+	} else {
+		setRes(r0);
+	}
 }
 setRes();
 </script>
