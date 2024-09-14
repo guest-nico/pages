@@ -153,10 +153,10 @@ livedl<br>
 var addElement = function(item) {
 	var dtE = document.createElement("dt");
 	dtE.innerHTML = '<span class="no">' + item.no + ".</span>" +
-		'<span class="name">' + item.name + ":</span>" +
+		'<span class="name">' + decodeTag(item.name) + ":</span>" +
 		'<span class="info">' + item.dt + "</span>";
 	var ddE = document.createElement("dd");
-	ddE.innerHTML = item.body;
+	ddE.innerHTML = decodeTag(item.body);
 	
 	dl = document.getElementsByTagName("dl")[0];
 	dl.appendChild(dtE);
@@ -196,6 +196,9 @@ var setRes = function (q = "") {
 		document.getElementById("bbs").style.display = "block";
 	}
 	request("GET", q, null, h);
+}
+var decodeTag = function (s) {
+	return s.replace(/<([^>]+(?<!br))>/g, "&lt;$1&gt;");
 }
 setRes(5);
 </script>
