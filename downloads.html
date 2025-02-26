@@ -23,7 +23,7 @@
 		margin-bottom: 8px;
 		border-bottom: 1px solid #e6e6e6;
 	}
-	#bbs a:visited {
+	#bbs a:visited, #bbs2 a:visited {
 		color: #0066cc;
 	}
 	</style>
@@ -95,6 +95,12 @@ livedl<br>
 </span>
 </section>
 
+<section class="md-mainContentBox" id="bbs2" style="width: 300px; height: fit-content; background: white; padding-bottom: 10px; display: none;">
+掲示板(生放送配信サーバーの切り替えに関して)
+<div style="border-bottom: #e6e6e6 1px solid; margin-top: 5px; margin-bottom: 15px;"></div>
+<dl style="font-size: 12px"></dl>
+<div style="text-align: center;"><a href="bbs2.html">掲示板へ</a></div>
+</section>
 <section class="md-mainContentBox" id="bbs" style="width: 300px; height: fit-content; background: white; padding-bottom: 10px; display: none;">
 掲示板
 <div style="border-bottom: #e6e6e6 1px solid; margin-top: 5px; margin-bottom: 15px;"></div>
@@ -150,7 +156,7 @@ livedl<br>
 	getCommitData("ncvPlayPlugin", "Play");
 
 //bbs
-var addElement = function(item) {
+var addElement = function(item, id) {
 	var dtE = document.createElement("dt");
 	dtE.innerHTML = '<span class="no">' + item.no + ".</span>" +
 		'<span class="name">' + decodeTag(item.name) + ":</span>" +
@@ -158,7 +164,7 @@ var addElement = function(item) {
 	var ddE = document.createElement("dd");
 	ddE.innerHTML = decodeTag(item.body);
 	
-	dl = document.getElementsByTagName("dl")[0];
+	dl = document.getElementById(id).childNodes[3];
 	dl.appendChild(dtE);
 	dl.appendChild(ddE);
 }
@@ -182,24 +188,26 @@ var request = function(method, q, data, handler) {
 	};
 	xhr.send(data);
 }
-var setRes = function (q = "") {
+var setRes = function (q = "", id) {
 	//clearMsg();
 	h = function(xhr, q) {
 		var json = JSON.parse(xhr.response);
 		console.log(json.length);
-		document.getElementsByTagName("dl")[0].innerHTML = "";
+		//document.getElementsByTagName("dl")[0].innerHTML = "";
+		document.getElementById(id).childNodes[3].innerHTML = "";
 		for (var i = 0; i < json.items.length; i++) {
 			var item = json.items[i];
 			console.log(item);
-			addElement(item);
+			addElement(item, id);
 		}
-		document.getElementById("bbs").style.display = "block";
+		document.getElementById(id).style.display = "block";
 	}
 	request("GET", q, null, h);
 }
 var decodeTag = function (s) {
 	return s.replace(/<([^>]+(?<!br))>/g, "&lt;$1&gt;");
 }
-setRes(5);
+setRes(5, "bbs");
+setRes("5&b=newserver", "bbs2");
 </script>
 </html>

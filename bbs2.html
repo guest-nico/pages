@@ -1,0 +1,337 @@
+<!doctype html>
+<html>
+<head>
+<title>掲示板</title>
+<script src="https://cdn.jsdelivr.net/npm/@zip.js/zip.js/dist/zip.min.js"></script>
+<style>
+#main {
+	margin:20px 5px 20px 5px;
+	padding: 30px;
+	background:#ffffff;
+}
+.no {
+	font-size: 14px;
+	//font-weight: bold;
+	margin-right: 8px;
+}
+.name {
+	font-size: 14px;
+	font-weight: bold;
+	color: #3c763d;
+	margin-right: 8px;
+}
+.info {
+	height: 14px;
+	font-size: 13px;
+	font-weight: 500;
+	//color: #9b9b9b;
+}
+dd {
+	margin: 16px 8px;
+	font-size: 14px;
+	line-height: 16px;
+	font-family: "MS PGothic AA","MS PGothic","ＭＳ Ｐゴシック","Mona","IPAMonaPGothic","IPA モナー Pゴシック",sans-serif;
+	padding-bottom: 8px;
+}
+#page {
+	text-align: center;
+}
+#page > a {
+	margin: 3px;
+	padding: 0px 1px 0px 1px;
+	border: 1px #67889e solid;
+}
+.curPage {
+	background-color: #103877;
+	color: white;
+}
+#content {
+	border-bottom: 1px solid #e6e6e6;
+	margin-bottom: 20px;
+	padding-bottom: 10px;
+	width: 600px;
+}
+#errorMsg {
+	background: #ff000e;
+	color: white;
+}
+</style>
+</head>
+<body style="background:#f4f4f4">
+<div id="main" style="">
+<div id="content">
+	<dl></dl>
+	<div id="page"></div>
+	<p id="errorMsg"></p>
+</div>
+<label>名前: </label><input type="text" id="name" width="100px"/><br/>
+<label>本文(必須):</label><br>
+<textarea rows="5" cols="47" id="body"></textarea><br>
+<label>添付ファイル(非公開): </label><input type="file" id="file" onchange="onFileChange(this)"/><label id="fileResult"></label><br>
+<input type="button" value="書き込む" onclick="writeRes()" style="margin-top: 5px"/>
+</div>
+</body>
+
+<script>
+var items = [];
+var addElement = function(item) {
+	var dtE = document.createElement("dt");
+	let info = item.dt;
+	if (item.id) info += " ID:" + item.id;
+	if (item.file) info += " [ファイル]";
+	dtE.innerHTML = '<span class="no" id="' + item.no + '">' + item.no + " :</span>" +
+		'<span class="name">' + decodeTag(item.name) + "</span>" +
+		'<span class="info">' + info + "</span>";
+	var ddE = document.createElement("dd");
+	ddE.innerHTML = decodeTag(item.body)
+			.replace(/(https*:\/\/[0-9a-zA-Z\/?=\.\-_%:#!()@]+)/g, "<a href='$&'>$&</a>")
+			.replace(/>>((\d+)(\-(\d+))*)/g, "<a href='javascript:linkRes($2, $4)'>$&</a>");
+	
+	dl = document.getElementsByTagName("dl")[0];
+	dl.appendChild(dtE);
+	dl.appendChild(ddE);
+}
+var setPage = function(currentNo, resCount, isInPage) {
+	var e = document.getElementById("page");
+	e.innerHTML = "";
+	var b = "";
+	start = Math.floor(currentNo / 30) * 30 - 150 + 1;
+	console.log("start page " + start + " curNo " + currentNo);
+	for (var i = start; i < start + 300; i += 30) {
+		if (i < 0 || i > resCount) continue;
+		
+		isCurrent = currentNo >= i && currentNo < i + 30;
+		if (isCurrent && isInPage) b += "<a class=\"curPage\">" + i + "-</a>";
+		else {
+			b += '<a href="javascript:setRes(' + i + ')">' + i + '-</a>';
+		}
+	}
+	e.innerHTML = b;
+}
+var clearMsg = function() {
+	document.getElementById("errorMsg").innerHTML = "";
+}
+var clearForm = function() {
+	document.getElementById("name").value = "";
+	document.getElementById("body").value = "";
+}
+var request = function(method, q, data, handler) {
+	q += "";
+	b = "b=newserver";
+	query = q != "" ? ("?startNo=" + q + "&" + b) : ("?" + b);
+	var xhr = new XMLHttpRequest();
+	
+	xhr.open(method, "https://d8fd29fs7vyjj.cloudfront.net/" + query);
+	
+	xhr.setRequestHeader("Content-Type", "application/json")
+	xhr.onreadystatechange  = function (e) {
+	    if (xhr.readyState === 4) {
+		    if (xhr.status === 200) {
+				handler(xhr, q);
+		    } else {
+				console.log("error");
+				console.log(xhr);
+				var json = JSON.parse(xhr.response);
+				document.getElementById("errorMsg").innerHTML = json.msg;
+		    }
+	    }
+	};
+	xhr.send(data);
+}
+var setResFromResponse = function(response, q) {
+	var json = JSON.parse(response);
+	console.log(json.length);
+	document.getElementsByTagName("dl")[0].innerHTML = "";
+	for (var i = 0; i < json.items.length; i++) {
+		var item = json.items[i];
+		console.log(item);
+		addElement(item);
+	}
+	items = json.items;
+	currentNo = json.items.length == 0 ? 0 : json.items[json.items.length - 1].no;
+	resCount = json["count"];
+	setPage(currentNo, resCount, q != "");
+}
+var setRes = function (q = "") {
+	clearMsg();
+	
+	h = function(xhr, q) {
+		setResFromResponse(xhr.response, q);
+	}
+	request("GET", q, null, h);
+}
+writeRes = async function() {
+	clearMsg();
+	const name = document.getElementById("name").value;
+	const body = document.getElementById("body").value;
+	const uploadResult = await uploadFile();
+	console.log("uploadResult " + uploadResult);
+	const seed = getCookie();
+	const json = JSON.stringify({"name":name, "body":body, "file":uploadResult, "seed":seed});
+	console.log("write json " + json);
+	
+	const h = function(xhr, q) {
+		setResFromResponse(xhr.response, q);
+		clearForm();
+	}
+	var res = request("POST", "", json, h);
+}
+var linkRes = function(r0, r1) {
+	var isInPage = items.find(x => x.no == r0) &&
+			(!r1 || items.find(x => x.no == r1));
+	if (isInPage) {
+		document.getElementById(r0).scrollIntoView();
+	} else {
+		setRes(r0);
+	}
+}
+var decodeTag = function (s) {
+	return s.replace(/<([^>]+(?<!br))>/g, "&lt;$1&gt;");
+}
+var onFileChange = function (file) {
+	if (file.files) {
+		document.getElementById("fileResult").innerHTML = "読込中";
+		var reader = new FileReader();
+		reader.onload = function() {
+			document.getElementById("fileResult").innerHTML = "読込完了";
+			file.result = file.files[0];
+		}
+		reader.onerror = function() {
+			document.getElementById("fileResult").innerHTML = "読込失敗";
+		}
+		var r = reader.readAsArrayBuffer(file.files[0])
+	}
+}
+
+var getPass = function(n) {
+	var c = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	var buf = "";
+	for (var i = 0; i < n; i++) {
+		var charI = Math.floor(Math.random() * c.length);
+		buf += c[charI];
+	}
+	return buf;
+}
+const getToken = async function() {
+	const response = await fetch('https://d8fd29fs7vyjj.cloudfront.net/token');
+	const data = await response.json();
+	return data.token.token;
+}
+const zipFile = async function(file, pass, name) {
+	const zipWriter = new zip.ZipWriter(new zip.BlobWriter("application/zip"), {
+        password: pass
+    });
+    await zipWriter.add("content", new zip.BlobReader(new Blob([file])));
+    const zipBlob = await zipWriter.close();
+	return new File([zipBlob], name);
+}
+const uploadFileSend = async function(name, type, file, token) {
+	const uploadUrl = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+	try {
+		const metadata = {
+			name: name + ".zip",
+			mimeType: type,
+		};
+		const form = new FormData();
+		form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+		form.append('file', file);
+		
+		const response = await fetch(uploadUrl, {
+			method: 'POST',
+			headers: new Headers({
+				'Authorization': `Bearer ${token}`
+			}),
+			body: form,
+		});
+		return response;
+	} catch (error) {
+		console.error('Error uploading file:', error);
+		alert('Error uploading file.');
+		return null;
+	}
+}
+const getUploadedUrl = async function(id, token) {
+	const dataInfoResponse = await fetch('https://www.googleapis.com/drive/v3/files/' + id + '?fields=id,name,webViewLink', {
+		method: 'GET',
+		headers: new Headers({ 'Authorization': 'Bearer ' + token })
+	});
+	const dataInfoJson = await dataInfoResponse.json();
+	return dataInfoJson.webViewLink;
+}
+const setPermissions = async function(id, token) {
+	await fetch(`https://www.googleapis.com/drive/v3/files/${id}/permissions`, {
+		method: 'POST',
+		headers: new Headers({
+			'Authorization': 'Bearer ' + token,
+			'Content-Type': 'application/json'
+		}),
+		body: JSON.stringify({
+			role: 'reader',
+			type: 'user',
+			emailAddress: 'guestnicon@gmail.com'
+		})
+	});
+}
+var uploadFile = async function () {
+	const f = document.getElementById("file");
+	if (!f.result) return null;
+	
+	const pass = getPass(10);
+	const zippedFile = await zipFile(f.result, pass, f.result.name);
+	
+	const token = await getToken();
+	try {
+		document.getElementById("fileResult").innerHTML = "送信中";
+		
+		const response = await uploadFileSend(f.result.name, f.result.type, zippedFile, token);
+		
+		console.log(response);
+		if (response == null || !response.ok) {
+			alert("file upload error");
+			return null;
+		}
+		const result = await response.json();
+		
+		const uploadedUrl = await getUploadedUrl(result.id, token);
+		await setPermissions(result.id, token);
+
+		console.log("upload " + uploadedUrl + " " + pass);
+		document.getElementById("fileResult").innerHTML = "送信完了"
+		return uploadedUrl + " " + pass;
+	} catch (error) {
+		console.error('Error uploading file:', error);
+		alert('Error uploading file.' + " " + error);
+		document.getElementById("fileResult").innerHTML = "送信失敗"
+		return null
+	}
+}
+const clearFile = function() {
+	document.getElementById("fileResult").innerHTML=""; 
+	document.getElementById("file").value="";
+}
+const setCookie = function() {
+	const curSeed = getCookie();
+	
+	const val = curSeed ? curSeed : getPass(10);
+	var dt = new Date();
+	const expires = "expires=" + new Date(dt.getFullYear()+2,dt.getMonth(), 1).toUTCString();
+	document.cookie = "seed=" + val + "; expires=" + expires + "; SameSite=None; Secure";
+	console.log("seed=" + val + "; " + expires + "; SameSite=None; Secure");
+}
+const getCookie = function() {
+	const cookies = document.cookie.split(";");
+	let curSeed = null;
+	for (var i = 0; i < cookies.length; i++) {
+		const _c = cookies[i].trim().split("=");
+		if (_c[0] != "seed") continue;
+		
+		curSeed = _c[1];
+	}
+	return curSeed;
+}
+setRes();
+clearFile();
+setCookie();
+</script>
+</html>
+
