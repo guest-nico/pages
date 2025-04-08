@@ -55,11 +55,24 @@ dd {
 	background: #ff000e;
 	color: white;
 }
+.search {
+	text-align: right;
+	font-size: 14px;
+	margin: 10px 1px;
+}
+#searchText {
+	width: 60px;
+	margin: 5px;
+}
 </style>
 </head>
 <body style="background:#f4f4f4">
 <div id="main" style="">
 <div id="content">
+	<div class="search">
+		<input type="text" id="searchText" /><input id="searchBtn" type="button" value="検索" onclick="searchBtnClick()" />
+		<label id="searchStatus"></label>
+	</div>
 	<dl></dl>
 	<div id="page"></div>
 	<p id="errorMsg"></p>
@@ -74,6 +87,7 @@ dd {
 
 <script>
 var items = [];
+var resCount = 0;
 var addElement = function(item) {
 	var dtE = document.createElement("dt");
 	let info = item.dt;
@@ -121,6 +135,8 @@ var request = function(method, q, data, handler) {
 	var xhr = new XMLHttpRequest();
 	xhr.open(method, "https://d8fd29fs7vyjj.cloudfront.net/" + query);
 	
+	if (q != "" && Number(q) <= resCount - 29)
+		xhr.setRequestHeader("Cache-Control", "max-age=315360000, public");
 	xhr.setRequestHeader("Content-Type", "application/json")
 	xhr.onreadystatechange  = function (e) {
 	    if (xhr.readyState === 4) {
@@ -131,6 +147,7 @@ var request = function(method, q, data, handler) {
 				console.log(xhr);
 				var json = JSON.parse(xhr.response);
 				document.getElementById("errorMsg").innerHTML = json.msg;
+				handler(xhr, q);
 		    }
 	    }
 	};
@@ -326,6 +343,71 @@ const getCookie = function() {
 		curSeed = _c[1];
 	}
 	return curSeed;
+}
+//search
+const isMatchWord = function (item, t) {
+	if (t == "") return false;
+	return item.dt.indexOf(t) > -1 ||
+			String(item.no).indexOf(t) > -1 ||
+			item.name.indexOf(t) > -1 ||
+			item.body.indexOf(t) > -1;
+}
+const searchBtnClick = function() {
+	var searchBtn = document.getElementById("searchBtn");
+	var searchStatus = document.getElementById("searchStatus");
+	var searchText = document.getElementById("searchText");
+	if (searchBtn.value == "中断") {
+		searchBtn.value = "検索";
+		searchStatus.innerHTML = "";
+		searchText.disabled = false;
+		return;
+	}
+	
+	var t = searchText.value;
+	if (t == "") return;
+	
+	searchBtn.value = "中断";
+	searchStatus.innerHTML = "検索中";
+	searchText.disabled = true;
+	
+	clearMsg();
+	items = [];
+	document.getElementsByTagName("dl")[0].innerHTML = "";
+	
+	var pages = [];
+	for (var i = 1; i < resCount; i += 30) 
+		pages.push(i);
+	var pageNum = pages.length;
+	var h = function(xhr, q) {
+		if (xhr.status != 200) {
+			setTimeout(() => search(pages), 1000);
+			return;
+		}
+		
+		pages.shift();
+		var json = JSON.parse(xhr.response);
+		console.log(pages);
+		for (var i = 0; i < json.items.length; i++) {
+			var item = json.items[i];
+			if (isMatchWord(item, t)) {
+				addElement(item);
+				items.push(item);
+			}
+		}
+		setTimeout(() => search(pages), 200);
+	}
+	var search = function(_pages) {
+		if (pages.length == 0 || searchBtn.value == "検索" || searchText.value != t) {
+			searchBtn.value = "検索";
+			searchStatus.innerHTML = "";
+			searchText.disabled = false;
+			return;
+		}
+		searchStatus.innerHTML = "検索中(" + (pageNum - pages.length) + "/" + pageNum + ")";
+		var q = pages[0];
+		request("GET", q, null, h);
+	}
+	search(pages);
 }
 setRes();
 clearFile();
