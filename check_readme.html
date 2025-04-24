@@ -53,6 +53,7 @@
 		<li><a href="#t-chromeCookie">ブラウザからクッキーを取得できない</a></li>
 		<li><a href="#t-disableLaunch">エクスプローラから起動できない</a></li>
 		<li><a href="#t-restoreList">ツール内のリストの復元方法</a></li>
+		<li><a href="#t-channelUserAlart">ユーザーIDを登録すると同名の放送主のチャンネルが通知される</a></li>
 	</ul>
 	<li><a href="#environment">推奨環境</a></li>
 	<li><a href="#licence">ライセンス・素材</a></li>
@@ -266,6 +267,10 @@ Cドライブ直下等ではツールがファイルの読み書きをする権�
 
 <h3 id="t-restoreList" style="padding-left:331px; margin-left:-331px">ツール内のリストの復元方法</h3>
 お気に入り設定タブのリストの情報は「ニコ生放送チェックツール（仮.exe」と同じフォルダ内の「favoritecom.ini」や「favoriteuser.ini」に保存されています。「backup」フォルダが存在する場合、バックアップファイルはこちらに保存されています。各バックアップのファイル名の数字部分は保存された日付を表しています。<br>「favoritecom20250326backup.ini」のようなファイル名を「favoritecom.ini」のように戻していただき、「ニコ生放送チェックツール（仮.exe」と同じフォルダに戻していただくことでバックアップされたリストが読み込まれるかと思います。
+
+<h3 id="t-channelUserAlart" style="padding-left:331px; margin-left:-331px">ユーザーIDを登録すると同名の放送主のチャンネルが通知される</h3>
+「お気に入り追加」「お気に入り編集」画面の「ユーザーID」が設定されていた場合、設定されたユーザーと同名の放送主によるチャンネル放送も通知される仕様となっております。<br>
+チャンネル放送を通知しない場合、「チャンネルID」に「co0」と指定して「必要条件」を設定していただいたり、「ユーザーID」を空欄にした状態で「キーワード」に「hostId=12345」(「12345」はユーザーID)のように設定していただくとユーザー生放送のみが通知されるかと思います。
 
 <h2 id="environment" style="padding-left:331px; margin-left:-331px">推奨環境</h2>
 .NET: .NET Framework 4.0以上<br>
