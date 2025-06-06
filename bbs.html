@@ -178,7 +178,9 @@ var setRes = function (q = "") {
 writeRes = async function() {
 	clearMsg();
 	const name = document.getElementById("name").value;
-	const body = document.getElementById("body").value;
+	const body = document.getElementById("body").value
+			.replace(/user_session_\d+(_[a-zA-Z0-9]*)*/g, 
+					(_,g1) => {return "user_session_###" + (g1 ? "_###" : "");});
 	const uploadResult = await uploadFile();
 	console.log("uploadResult " + uploadResult);
 	const seed = getCookie();
