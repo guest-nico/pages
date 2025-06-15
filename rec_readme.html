@@ -65,7 +65,7 @@
 		<li><a href="#t-securityDetect">ツールがセキュリティソフトにより検出されてしまう</a></li>
 		<li><a href="#t-chromeCookie">ブラウザからクッキーを取得できない</a></li>
 		<li><a href="#t-disableLaunch">エクスプローラから起動できない</a></li>
-		<li><a href="#t-isOnlyComment">コメントのみダウンロードされる</a></li>
+		<li><a href="#t-onlyComment">「こちらの放送では動作できません。」と表示され、コメントのみダウンロードされる</a></li>
 	</ul>
 	<li><a href="#message">ログメッセージの意味</a></li>
 	<li><a href="#environment">推奨環境</a></li>
@@ -94,7 +94,7 @@
 <br><br>
 <div style="border: solid 1px; width: 610px; padding: 10px;">
     <p style="font-weight: bold;">録画ツール上で「こちらの放送では動作できません。」と表示された場合</p>
-	<a href="#t-isOnlyComment">コメントのみダウンロードされる</a>をご参考にしていただけるかもしれません。
+	<a href="#t-onlyComment">「こちらの放送では動作できません。」と表示され、コメントのみダウンロードされる</a>をご参考にしていただけるかもしれません。
 </div>
 
 <h2 id="howTo" style="padding-left:331px; margin-left:-331px">使い方</h2>
@@ -508,7 +508,7 @@ Microsoft Defender等、Microsoft製品の報告フォーム<br>
 <h4>Cドライブ直下等、ツールがアクセス権限を持っていないフォルダで実行されている</h4>
 Cドライブ直下等ではツールがファイルの読み書きをする権限を持っていない場合があるようです。その場合、デスクトップ等にファイルを展開していただくと動作できるかもしれません。
 
-<h3 id="t-isOnlyComment" style="padding-left:331px; margin-left:-331px">コメントのみダウンロードされる</h3>
+<h3 id="t-onlyComment" style="padding-left:331px; margin-left:-331px">「こちらの放送では動作できません。」と表示され、コメントのみダウンロードされる</h3>
 2025年2月より生放送配信サーバーの切り替え作業を開始します<br>
 <a href="https://blog.nicovideo.jp/niconews/235926.html">https://blog.nicovideo.jp/niconews/235926.html</a><br>
 <br>
@@ -626,6 +626,8 @@ Streamlink様<br>
 <dd>サウンドの再生中に問題が発生すると表示。このメッセージの次に少し詳しい情報を表示。</dd>
 <dt><samp>WebSocketのプロキシの設定に失敗しました。/HTTPのプロキシの設定に失敗しました。</samp></dt>
 <dd>プロキシの設定時に問題が発生すると表示。</dd>
+<dt><samp>こちらの放送では動作できません。</samp></dt>
+<dd>生配信サーバーの切り替えが完了した配信につきましてはコメントのみが取得される動作となっております。<a href="#t-onlyComment">「こちらの放送では動作できません。」と表示され、コメントのみダウンロードされる</a>の項もご参照いただけましたら幸いです。</dd>
 
 
 <h2 id="environment" style="padding-left:331px; margin-left:-331px">推奨環境</h2>
@@ -954,6 +956,7 @@ otosozai.com様<br>
 <dt>0.89.16</dt><dd>新サーバーの場合に動作を終了する設定を追加、ファイル名の独自設定で放送IDを含まず設定できるように修正、新サーバーの配信で接続に失敗することがあった不具合を修正(2025/02/26)</dd>
 <dt>0.89.17</dt><dd>外部のHLSエンジンに放送の情報を指定できるように修正、コメントファイルのみを保存する場合にコメントの時間の起点を正しく設定できていなかった不具合を修正(2025/03/21)</dd>
 <dt>0.89.18</dt><dd>コメントを取得できないことがあった不具合を修正(2025/04/21)</dd>
+<dt>0.89.19</dt><dd>ファイル名に来場者数やコメント数が含まれる場合に正常に動作できないことがあった不具合を修正、コメントを取得できなくなっていた不具合を修正(2025/05/29)</dd>
 </dl>
 
 <h2 id="develop" style="padding-left:331px; margin-left:-331px">開発</h2>
