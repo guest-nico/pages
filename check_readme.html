@@ -54,6 +54,7 @@
 		<li><a href="#t-disableLaunch">エクスプローラから起動できない</a></li>
 		<li><a href="#t-restoreList">ツール内のリストの復元方法</a></li>
 		<li><a href="#t-channelUserAlart">ユーザーIDを登録すると同名の放送主のチャンネルが通知される</a></li>
+		<li><a href="#t-notFoundFile">起動時に「(フォルダ名)内に(ファイル名)が見つかりませんでした」のメッセージが表示される</a></li>
 	</ul>
 	<li><a href="#environment">推奨環境</a></li>
 	<li><a href="#licence">ライセンス・素材</a></li>
@@ -271,6 +272,9 @@ Cドライブ直下等ではツールがファイルの読み書きをする権�
 <h3 id="t-channelUserAlart" style="padding-left:331px; margin-left:-331px">ユーザーIDを登録すると同名の放送主のチャンネルが通知される</h3>
 「お気に入り追加」「お気に入り編集」画面の「ユーザーID」が設定されていた場合、設定されたユーザーと同名の放送主によるチャンネル放送も通知される仕様となっております。<br>
 チャンネル放送を通知しない場合、「チャンネルID」に「co0」と指定して「必要条件」を設定していただいたり、「ユーザーID」を空欄にした状態で「キーワード」に「hostId=12345」(「12345」はユーザーID)のように設定していただくとユーザー生放送のみが通知されるかと思います。
+
+<h3 id="t-notFoundFile" style="padding-left:331px; margin-left:-331px">起動時に「(フォルダ名)内に(ファイル名)が見つかりませんでした」のメッセージが表示される</h3>
+正常にファイルが展開されていない場合など、フォルダ内にファイルが存在していない場合に表示されます。Windows標準の解凍機能を使っている場合、7-ZipやLhazでの展開をお試しいただくと改善されるかもしれません。
 
 <h2 id="environment" style="padding-left:331px; margin-left:-331px">推奨環境</h2>
 .NET: .NET Framework 4.0以上<br>
