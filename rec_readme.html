@@ -53,7 +53,7 @@
 	<ul>
 		<li><a href="#t-dropSeg">セグメント抜けが多い、他の作業をしていると途切れやすい</a></li>
 		<li><a href="#t-notOpenSetting">設定画面が開かない</a></li>
-		<li><a href="#t-commentFew">タイムシフトのコメント取得数がページ上の数より少ない</a></li>
+		<li><a href="#t-commentFew">タイムシフトのコメント取得数が視聴ページに表示されているコメント数より少ない</a></li>
 		<li><a href="#t-commentPacket">コメントファイルを外部ツールで読み込めない</a></li>
 		<li><a href="#t-notFoundAudio">音声が再生されない</a></li>
 		<li><a href="#t-fileNameChange">ファイル名が放送IDだけになる</a></li>
@@ -425,8 +425,10 @@ mp4へ変換後にWindows Media Player系のプレイヤーで再生すると音
 <h3 id="t-notOpenSetting" style="padding-left:331px; margin-left:-331px">設定画面が開かない</h3>
 動作には.NET Frameworkのバージョン4.5.2以上が推奨となっております。もしインストールされていない場合はインストールしてみると開けるかもしれないです。
 
-<h3 id="t-commentFew" style="padding-left:331px; margin-left:-331px">タイムシフトのコメント取得数がブラウザの視聴ページ上の数より少ない</h3>
-ページ上に表示されているコメント数はアリーナ席以外の部屋のコメントも含まれていますが、タイムシフトの録画時に取得しているコメントはアリーナ席のみとなっており、その内で追い出しコメントは保存をしないため、ページ上の数よりも保存される数は少なくなります。
+<h3 id="t-commentFew" style="padding-left:331px; margin-left:-331px">タイムシフトのコメント取得数が視聴ページに表示されているコメント数より少ない</h3>
+視聴ページに表示されているコメント数は流量調整により表示されていないコメント数も含まれているようですが、タイムシフトの録画時に取得しているコメントは調整後のコメントのみとなっており、視聴ページに表示されているコメント数よりも少なくなることがあるようです。<br>
+【ニコニコ生放送】「部屋の統合」「コメントフィルター機能」の詳細・FAQ<br>
+<a href="https://ch.nicovideo.jp/nicotalk/blomaga/ar1921513">https://ch.nicovideo.jp/nicotalk/blomaga/ar1921513</a>
 
 <h3 id="t-commentPacket" style="padding-left:331px; margin-left:-331px">コメントファイルを外部ツールで読み込めない</h3>
 コメントファイルの末尾に「&lt/packet>」を書き加えると読み込めるようになるかもしれません。
